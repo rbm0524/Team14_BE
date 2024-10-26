@@ -68,4 +68,9 @@ public class MemberService {
 	public void registerMember(Member member) {
 		memberRepository.saveAndFlush(member);
 	}
+
+	public Long getMemberId(String email) {
+		Member member = memberRepository.findByEmail(email).get();
+		return member.getId();
+	}
 }
