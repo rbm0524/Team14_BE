@@ -4,15 +4,18 @@ import com.ordertogether.team14_be.member.persistence.MemberRepository;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRequestDto;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailResponseDto;
+import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoResponseDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRequestDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoResponseDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoResponseDto;
+import com.ordertogether.team14_be.order.details.dto.get.MemberBriefInfo;
 import com.ordertogether.team14_be.order.details.dto.get.OrderInfo;
 import com.ordertogether.team14_be.order.details.entity.OrderDetail;
 import com.ordertogether.team14_be.order.details.repository.OrderDetailRepository;
 import com.ordertogether.team14_be.spot.entity.Spot;
 import com.ordertogether.team14_be.spot.repository.SimpleSpotRepository;
 import com.ordertogether.team14_be.spot.repository.SpotRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -107,5 +110,37 @@ public class OrderDetailService {
 				spot.getPickUpLocation(),
 				spot.getDeliveryStatus(),
 				orderDetail.getPrice());
+	}
+
+	@Transactional(readOnly = true)
+	public GetCreatorOrderInfoResponseDto getCreatorOrderInfo(Member member, Long spotId) {
+		Spot spot =
+				simpleSpotRepository
+						.findById(spotId)
+						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
+		Member creator = spot.getMember();
+
+		if (!member.getId().equals(creator.getId()))
+			throw new IllegalArgumentException("참여자입니다.(방장만 사용 가능)");
+
+		List<OrderDetail> orders = orderDetailRepository.findAllBySpot(spot);
+
+		return new GetCreatorOrderInfoResponseDto(
+				spot.getCategory().toString(),
+				spot.getStoreName(),
+				spot.getMinimumOrderAmount(),
+				spot.getPickUpLocation(),
+				spot.getDeliveryStatus(),
+				orders.stream()
+						.map(
+								order -> {
+									Member participant = order.getMember();
+									return new MemberBriefInfo(
+											participant.getId(),
+											participant.getDeliveryName(),
+											order.getPrice(),
+											order.isPayed());
+								})
+						.toList()); // memberInfo
 	}
 }

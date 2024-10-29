@@ -4,6 +4,7 @@ import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.member.presentation.LoginMember;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRequestDto;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailResponseDto;
+import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoResponseDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRequestDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoResponseDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoResponseDto;
@@ -46,9 +47,10 @@ public class OrderDetailController {
 			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
 		return ResponseEntity.ok(orderDetailService.getParticipantOrderInfo(member, spotId));
 	}
-	//	@GetMapping("/creator")
-	//	public ResponseEntity<GetCreatorOrderInfoResponseDto> getCreatorOrderInfo(
-	//			@LoginMember Member member, @RequestParam(name="spot-id") Long spotId){
-	//		return ResponseEntity.ok(orderDetailService.getCreatorOrderInfo(member, spotId));
-	//	}
+
+	@GetMapping("/creator")
+	public ResponseEntity<GetCreatorOrderInfoResponseDto> getCreatorOrderInfo(
+			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
+		return ResponseEntity.ok(orderDetailService.getCreatorOrderInfo(member, spotId));
+	}
 }

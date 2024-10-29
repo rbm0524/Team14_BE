@@ -7,5 +7,5 @@ public record GetCreatorOrderInfoResponseDto(
 		String storeName,
 		int minimumOrderAmount,
 		String pickUpLocation,
-		boolean deliveryStatus,
+		String deliveryStatus,
 		List<MemberBriefInfo> memberInfo) {}
