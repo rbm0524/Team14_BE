@@ -6,6 +6,7 @@ import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailResponseDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRequestDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoResponseDto;
+import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoResponseDto;
 import com.ordertogether.team14_be.order.details.dto.get.OrderInfo;
 import com.ordertogether.team14_be.order.details.entity.OrderDetail;
 import com.ordertogether.team14_be.order.details.repository.OrderDetailRepository;
@@ -39,8 +40,8 @@ public class OrderDetailService {
 						.orElseThrow(() -> new IllegalArgumentException("참여자 정보가 없습니다."));
 
 		// 스팟 정보 설정 - spotMapper가 아직 구현되지 않아서 Simple사용
-		//		SpotDto spotDto =
-		//				spotRepository.findByIdAndIsDeletedFalse(createOrderDetailRequestDto.getSpotId());
+		// SpotDto spotDto =
+		// spotRepository.findByIdAndIsDeletedFalse(createOrderDetailRequestDto.getSpotId());
 		Spot spot =
 				simpleSpotRepository
 						.findById(createOrderDetailRequestDto.getSpotId())
@@ -79,19 +80,32 @@ public class OrderDetailService {
 				orderDetails.getTotalPages(),
 				orderDetails.getTotalElements(),
 				orderDetails.getContent().stream()
-						.map(
-								order -> {
-									Spot spot = order.getSpot();
-									return new OrderInfo(
-											order.getId(),
-											spot.getCategory().toString(),
-											spot.getStoreName(),
-											spot.getMinimumOrderAmount(),
-											spot.getPickUpLocation(),
-											spot.getDeliveryStatus(),
-											order.getPrice(),
-											spot.getMember().getId().equals(member.getId()));
-								})
+						.map(order -> new OrderInfo(member.getId(), order, order.getSpot()))
 						.toList());
+	}
+
+	@Transactional(readOnly = true)
+	public GetParticipantOrderInfoResponseDto getParticipantOrderInfo(Member member, Long spotId) {
+		Spot spot =
+				simpleSpotRepository
+						.findById(spotId)
+						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
+		Member creator = spot.getMember();
+
+		if (member.getId().equals(creator.getId()))
+			throw new IllegalArgumentException("방장입니다.(참여자만 사용 가능)");
+
+		OrderDetail orderDetail =
+				orderDetailRepository
+						.findFirstBySpotAndMember(spot, member)
+						.orElseThrow(() -> new IllegalArgumentException("주문 정보가 없습니다."));
+
+		return new GetParticipantOrderInfoResponseDto(
+				spot.getCategory().toString(),
+				spot.getStoreName(),
+				spot.getMinimumOrderAmount(),
+				spot.getPickUpLocation(),
+				spot.getDeliveryStatus(),
+				orderDetail.getPrice());
 	}
 }

@@ -6,6 +6,7 @@ import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailResponseDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRequestDto;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoResponseDto;
+import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoResponseDto;
 import com.ordertogether.team14_be.order.details.service.OrderDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,4 +40,15 @@ public class OrderDetailController {
 			@LoginMember Member member, @ModelAttribute @Valid GetOrdersInfoRequestDto dto) {
 		return ResponseEntity.ok(orderDetailService.getOrdersInfo(member, dto));
 	}
+
+	@GetMapping("/participant")
+	public ResponseEntity<GetParticipantOrderInfoResponseDto> getParticipantOrderInfo(
+			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
+		return ResponseEntity.ok(orderDetailService.getParticipantOrderInfo(member, spotId));
+	}
+	//	@GetMapping("/creator")
+	//	public ResponseEntity<GetCreatorOrderInfoResponseDto> getCreatorOrderInfo(
+	//			@LoginMember Member member, @RequestParam(name="spot-id") Long spotId){
+	//		return ResponseEntity.ok(orderDetailService.getCreatorOrderInfo(member, spotId));
+	//	}
 }
