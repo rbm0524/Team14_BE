@@ -1,9 +1,11 @@
 package com.ordertogether.team14_be.order.details.dto.get;
 
-public record GetParticipantOrderInfoResponseDto(
+import java.util.List;
+
+public record GetCreatorOrderInfoRes(
 		String category,
 		String storeName,
 		int minimumOrderAmount,
 		String pickUpLocation,
 		String deliveryStatus,
-		int price) {}
+		List<MemberBriefInfo> memberInfo) {}

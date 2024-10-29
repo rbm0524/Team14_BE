@@ -2,12 +2,12 @@ package com.ordertogether.team14_be.order.details.controller;
 
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.member.presentation.LoginMember;
-import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRequestDto;
-import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailResponseDto;
-import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoResponseDto;
-import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRequestDto;
-import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoResponseDto;
-import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoResponseDto;
+import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
+import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
+import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
+import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoReq;
+import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
+import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
 import com.ordertogether.team14_be.order.details.service.OrderDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,27 +29,27 @@ public class OrderDetailController {
 
 	// 주문 생성
 	@PostMapping
-	public ResponseEntity<CreateOrderDetailResponseDto> createOrderDetail(
-			@RequestBody CreateOrderDetailRequestDto createOrderDetailRequestDto) {
-		CreateOrderDetailResponseDto createOrderDetailResponseDto =
-				orderDetailService.createOrderDetail(createOrderDetailRequestDto);
-		return ResponseEntity.ok(createOrderDetailResponseDto);
+	public ResponseEntity<CreateOrderDetailRes> createOrderDetail(
+			@RequestBody CreateOrderDetailReq createOrderDetailReq) {
+		CreateOrderDetailRes createOrderDetailRes =
+				orderDetailService.createOrderDetail(createOrderDetailReq);
+		return ResponseEntity.ok(createOrderDetailRes);
 	}
 
 	@GetMapping
-	public ResponseEntity<GetOrdersInfoResponseDto> getOrdersInfo(
-			@LoginMember Member member, @ModelAttribute @Valid GetOrdersInfoRequestDto dto) {
+	public ResponseEntity<GetOrdersInfoRes> getOrdersInfo(
+			@LoginMember Member member, @ModelAttribute @Valid GetOrdersInfoReq dto) {
 		return ResponseEntity.ok(orderDetailService.getOrdersInfo(member, dto));
 	}
 
 	@GetMapping("/participant")
-	public ResponseEntity<GetParticipantOrderInfoResponseDto> getParticipantOrderInfo(
+	public ResponseEntity<GetParticipantOrderInfoRes> getParticipantOrderInfo(
 			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
 		return ResponseEntity.ok(orderDetailService.getParticipantOrderInfo(member, spotId));
 	}
 
 	@GetMapping("/creator")
-	public ResponseEntity<GetCreatorOrderInfoResponseDto> getCreatorOrderInfo(
+	public ResponseEntity<GetCreatorOrderInfoRes> getCreatorOrderInfo(
 			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
 		return ResponseEntity.ok(orderDetailService.getCreatorOrderInfo(member, spotId));
 	}

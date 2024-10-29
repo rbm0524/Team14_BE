@@ -2,12 +2,12 @@ package com.ordertogether.team14_be.order.details.service;
 
 import com.ordertogether.team14_be.member.persistence.MemberRepository;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
-import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRequestDto;
-import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailResponseDto;
-import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoResponseDto;
-import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRequestDto;
-import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoResponseDto;
-import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoResponseDto;
+import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
+import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
+import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
+import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoReq;
+import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
+import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.MemberBriefInfo;
 import com.ordertogether.team14_be.order.details.dto.get.OrderInfo;
 import com.ordertogether.team14_be.order.details.entity.OrderDetail;
@@ -33,13 +33,12 @@ public class OrderDetailService {
 
 	// 주문 상세 정보 생성 메서드
 	@Transactional
-	public CreateOrderDetailResponseDto createOrderDetail(
-			CreateOrderDetailRequestDto createOrderDetailRequestDto) {
+	public CreateOrderDetailRes createOrderDetail(CreateOrderDetailReq createOrderDetailReq) {
 
 		// 참여자 본인 정보 설정
 		Member member =
 				memberRepository
-						.findById(createOrderDetailRequestDto.getParticipantId())
+						.findById(createOrderDetailReq.getParticipantId())
 						.orElseThrow(() -> new IllegalArgumentException("참여자 정보가 없습니다."));
 
 		// 스팟 정보 설정 - spotMapper가 아직 구현되지 않아서 Simple사용
@@ -47,20 +46,20 @@ public class OrderDetailService {
 		// spotRepository.findByIdAndIsDeletedFalse(createOrderDetailRequestDto.getSpotId());
 		Spot spot =
 				simpleSpotRepository
-						.findById(createOrderDetailRequestDto.getSpotId())
+						.findById(createOrderDetailReq.getSpotId())
 						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
 
 		OrderDetail orderDetail =
 				OrderDetail.builder()
 						.member(member)
 						.spot(spot)
-						.price(createOrderDetailRequestDto.getPrice())
-						.isPayed(createOrderDetailRequestDto.isPayed())
+						.price(createOrderDetailReq.getPrice())
+						.isPayed(createOrderDetailReq.isPayed())
 						.build();
 
 		OrderDetail savedOrderDetail = orderDetailRepository.save(orderDetail);
 
-		return CreateOrderDetailResponseDto.builder()
+		return CreateOrderDetailRes.builder()
 				.id(savedOrderDetail.getId())
 				.price(savedOrderDetail.getPrice())
 				.isPayed(savedOrderDetail.isPayed())
@@ -70,7 +69,7 @@ public class OrderDetailService {
 	}
 
 	@Transactional(readOnly = true)
-	public GetOrdersInfoResponseDto getOrdersInfo(Member member, GetOrdersInfoRequestDto dto) {
+	public GetOrdersInfoRes getOrdersInfo(Member member, GetOrdersInfoReq dto) {
 		Page<OrderDetail> orderDetails =
 				orderDetailRepository.findAllByMember(
 						member,
@@ -79,7 +78,7 @@ public class OrderDetailService {
 								dto.size(),
 								dto.sort() == null ? Sort.unsorted() : Sort.by(dto.sort().get(1))));
 
-		return new GetOrdersInfoResponseDto(
+		return new GetOrdersInfoRes(
 				orderDetails.getTotalPages(),
 				orderDetails.getTotalElements(),
 				orderDetails.getContent().stream()
@@ -88,7 +87,7 @@ public class OrderDetailService {
 	}
 
 	@Transactional(readOnly = true)
-	public GetParticipantOrderInfoResponseDto getParticipantOrderInfo(Member member, Long spotId) {
+	public GetParticipantOrderInfoRes getParticipantOrderInfo(Member member, Long spotId) {
 		Spot spot =
 				simpleSpotRepository
 						.findById(spotId)
@@ -103,7 +102,7 @@ public class OrderDetailService {
 						.findFirstBySpotAndMember(spot, member)
 						.orElseThrow(() -> new IllegalArgumentException("주문 정보가 없습니다."));
 
-		return new GetParticipantOrderInfoResponseDto(
+		return new GetParticipantOrderInfoRes(
 				spot.getCategory().toString(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
@@ -113,7 +112,7 @@ public class OrderDetailService {
 	}
 
 	@Transactional(readOnly = true)
-	public GetCreatorOrderInfoResponseDto getCreatorOrderInfo(Member member, Long spotId) {
+	public GetCreatorOrderInfoRes getCreatorOrderInfo(Member member, Long spotId) {
 		Spot spot =
 				simpleSpotRepository
 						.findById(spotId)
@@ -125,7 +124,7 @@ public class OrderDetailService {
 
 		List<OrderDetail> orders = orderDetailRepository.findAllBySpot(spot);
 
-		return new GetCreatorOrderInfoResponseDto(
+		return new GetCreatorOrderInfoRes(
 				spot.getCategory().toString(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
