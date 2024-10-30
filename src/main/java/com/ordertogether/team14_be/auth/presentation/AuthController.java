@@ -22,7 +22,7 @@ public class AuthController {
 
 	@GetMapping("/login")
 	public ResponseEntity<ApiResponse<String>> getToken(@RequestHeader String authorizationCode) {
-		return authService.kakaoLogin(authorizationCode);
+		return authService.loginKakaoUser(authorizationCode);
 	}
 
 	@PostMapping("/signup")

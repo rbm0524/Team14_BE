@@ -33,7 +33,7 @@ public class AuthService {
 		this.redirectPage = redirectPage;
 	}
 
-	public ResponseEntity<ApiResponse<String>> kakaoLogin(String authorizationCode) {
+	public ResponseEntity<ApiResponse<String>> loginKakaoUser(String authorizationCode) {
 		String kakaoToken = kakaoClient.getAccessToken(authorizationCode); // 인가코드로부터 카카오토큰 발급
 		KakaoUserInfo kakaoUserInfo = kakaoClient.getUserInfo((kakaoToken));
 		String userKakaoEmail = kakaoUserInfo.kakaoAccount().email(); // 와 사용자 카카오 이메일이야
