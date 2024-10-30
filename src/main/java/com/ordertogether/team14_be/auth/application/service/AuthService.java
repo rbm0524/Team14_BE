@@ -10,22 +10,28 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
 public class AuthService {
-
 	private final KakaoClient kakaoClient;
 	private final MemberService memberService;
 	private final JwtUtil jwtUtil;
+	private final String redirectPage;
 
-	@Value(("${FRONT_PAGE_SIGNUP}"))
-	String redirectPage;
+	public AuthService(
+			KakaoClient kakaoClient,
+			MemberService memberService,
+			JwtUtil jwtUtil,
+			@Value("${FRONT_PAGE_SIGNUP}") String redirectPage) {
+		this.kakaoClient = kakaoClient;
+		this.memberService = memberService;
+		this.jwtUtil = jwtUtil;
+		this.redirectPage = redirectPage;
+	}
 
 	public ResponseEntity<ApiResponse<String>> kakaoLogin(String authorizationCode) {
 		String kakaoToken = kakaoClient.getAccessToken(authorizationCode); // 인가코드로부터 카카오토큰 발급
