@@ -65,6 +65,7 @@ public class MemberService {
 		return memberRepository.findByEmail(email);
 	}
 
+	@Transactional
 	public void registerMember(Member member) {
 		memberRepository.saveAndFlush(member);
 	}
