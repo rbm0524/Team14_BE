@@ -64,10 +64,6 @@ public class Member {
 		return deliveryName;
 	}
 
-	public String getPlatform() {
-		return platform;
-	}
-
 	public void modifyMemberInfo(String deliveryName, String phoneNumber) {
 		this.deliveryName = deliveryName;
 		this.phoneNumber = phoneNumber;
