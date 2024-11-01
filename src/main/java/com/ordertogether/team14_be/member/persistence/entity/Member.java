@@ -30,6 +30,16 @@ public class Member {
 
 	protected Member() {}
 
+	public Member(
+			Long id, String email, int point, String phoneNumber, String deliveryName, String platform) {
+		this.id = id;
+		this.email = email;
+		this.point = point;
+		this.phoneNumber = phoneNumber;
+		this.deliveryName = deliveryName;
+		this.platform = platform;
+	}
+
 	public Member(String email, int point, String phoneNumber, String deliveryName, String platform) {
 		this.email = email;
 		this.point = point;
@@ -71,5 +81,10 @@ public class Member {
 	public void modifyMemberInfo(String deliveryName, String phoneNumber) {
 		this.deliveryName = deliveryName;
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Integer increasePoint(int point) {
+		this.point += point;
+		return this.point;
 	}
 }
