@@ -1,12 +1,12 @@
 package com.ordertogether.team14_be.spot.converter;
 
-import org.springframework.stereotype.Component;
+import jakarta.persistence.Converter;
 import com.ordertogether.team14_be.spot.enums.Category;
 
-@Component
+@Converter(autoApply = true)
 public class CategoryConverter extends AbstractCodedEnumConverter<Category, String> {
 
-    public CategoryConverter(Class<Category> clazz) {
-        super(clazz); // Category.class를 부모 클래스에 전달
+    public CategoryConverter() {
+        super(Category.class); // Category.class를 부모 클래스에 전달
     }
 }
