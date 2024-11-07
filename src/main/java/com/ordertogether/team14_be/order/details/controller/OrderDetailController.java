@@ -8,6 +8,7 @@ import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoReq;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
+import com.ordertogether.team14_be.order.details.dto.update.UpdateOrderPriceReq;
 import com.ordertogether.team14_be.order.details.service.OrderDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,5 +54,13 @@ public class OrderDetailController {
 	public ResponseEntity<GetCreatorOrderInfoRes> getCreatorOrderInfo(
 			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
 		return ResponseEntity.ok(orderDetailService.getCreatorOrderInfo(member, spotId));
+	}
+
+	// 가격 수정
+	@PutMapping("/price")
+	public ResponseEntity<Void> updateOrderPrice(
+		@LoginMember Member member, @ModelAttribute @Valid UpdateOrderPriceReq dto) {
+		orderDetailService.updateOrderPrice(member, dto);
+		return ResponseEntity.ok().build();
 	}
 }
