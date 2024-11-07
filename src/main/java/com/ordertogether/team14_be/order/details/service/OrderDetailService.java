@@ -10,6 +10,7 @@ import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.MemberBriefInfo;
 import com.ordertogether.team14_be.order.details.dto.get.OrderInfo;
+import com.ordertogether.team14_be.order.details.dto.update.UpdateOrderPriceReq;
 import com.ordertogether.team14_be.order.details.entity.OrderDetail;
 import com.ordertogether.team14_be.order.details.repository.OrderDetailRepository;
 import com.ordertogether.team14_be.spot.entity.Spot;
@@ -141,5 +142,18 @@ public class OrderDetailService {
 											order.isPayed());
 								})
 						.toList()); // memberInfo
+	}
+
+	@Transactional
+	public void updateOrderPrice(Member member, UpdateOrderPriceReq dto) {
+		OrderDetail orderDetail = orderDetailRepository.findById(dto.orderId())
+			.orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
+
+		if (!orderDetail.getMember().getId().equals(member.getId())) {
+			throw new IllegalArgumentException("주문의 참여자가 아닙니다.");
+		}
+
+		orderDetail.updatePrice(dto.price());
+		orderDetailRepository.save(orderDetail);
 	}
 }
