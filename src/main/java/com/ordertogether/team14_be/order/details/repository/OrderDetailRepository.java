@@ -16,8 +16,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 	@EntityGraph(attributePaths = {"spot"})
 	Page<OrderDetail> findAllByMember(Member member, Pageable pageable);
 
-	Optional<OrderDetail> findBySpotAndMember(
-			Spot spot, Member member); // 한 스팟에 여러 멤버가 못들어가는지 확인하고 First빼야 함
+	Optional<OrderDetail> findBySpotAndMember(Spot spot, Member member);
 
 	List<OrderDetail> findAllBySpot(Spot spot);
 }
