@@ -100,7 +100,7 @@ public class OrderDetailService {
 
 		OrderDetail orderDetail =
 				orderDetailRepository
-						.findFirstBySpotAndMember(spot, member)
+						.findBySpotAndMember(spot, member)
 						.orElseThrow(() -> new IllegalArgumentException("주문 정보가 없습니다."));
 
 		return new GetParticipantOrderInfoRes(
@@ -146,8 +146,10 @@ public class OrderDetailService {
 
 	@Transactional
 	public void updateOrderPrice(Member member, UpdateOrderPriceReq dto) {
-		OrderDetail orderDetail = orderDetailRepository.findById(dto.orderId())
-			.orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
+		OrderDetail orderDetail =
+				orderDetailRepository
+						.findById(dto.orderId())
+						.orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
 
 		if (!orderDetail.getMember().getId().equals(member.getId())) {
 			throw new IllegalArgumentException("주문의 참여자가 아닙니다.");
