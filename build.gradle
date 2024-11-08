@@ -43,7 +43,7 @@ dependencies {
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swagger_version}"
     implementation 'org.mapstruct:mapstruct:1.6.2'
     implementation 'ch.hsr:geohash:1.4.0'
-
+    implementation 'net.nurigo:sdk:4.3.0'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
