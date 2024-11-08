@@ -1,9 +1,6 @@
 package com.ordertogether.team14_be.spot.converter;
 
 import jakarta.persistence.AttributeConverter;
-import jakarta.persistence.Converter;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -33,12 +30,6 @@ public abstract class AbstractCodedEnumConverter<T extends Enum<T> & CodedEnum<E
 		if (Objects.isNull(dbData)) {
 			return null;
 		}
-		T asdfsdf =
-				Arrays.stream(clazz.getEnumConstants())
-						.filter(e -> e.getCode().equals(dbData))
-						.findFirst()
-						.orElseThrow(() -> new IllegalArgumentException("Unknown code: " + dbData));
-		System.out.println(asdfsdf.name());
 		return Arrays.stream(clazz.getEnumConstants())
 				.filter(e -> e.getCode().equals(dbData))
 				.findFirst()
