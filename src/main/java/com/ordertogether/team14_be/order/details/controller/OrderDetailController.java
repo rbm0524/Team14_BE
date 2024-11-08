@@ -59,7 +59,7 @@ public class OrderDetailController {
 	// 가격 수정
 	@PutMapping("/price")
 	public ResponseEntity<Void> updateOrderPrice(
-			@LoginMember Member member, @RequestBody @Valid UpdateOrderPriceReq dto) {
+		@LoginMember Member member, @RequestBody @Valid UpdateOrderPriceReq dto) {
 		orderDetailService.updateOrderPrice(member, dto);
 		return ResponseEntity.ok().build();
 	}
