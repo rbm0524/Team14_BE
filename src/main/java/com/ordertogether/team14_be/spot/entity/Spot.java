@@ -3,6 +3,7 @@ package com.ordertogether.team14_be.spot.entity;
 import com.ordertogether.team14_be.common.persistence.entity.BaseEntity;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.spot.converter.AbstractCodedEnumConverter;
+import com.ordertogether.team14_be.spot.converter.CategoryConverter;
 import com.ordertogether.team14_be.spot.enums.Category;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -34,7 +35,7 @@ public class Spot extends BaseEntity {
 	@Column(precision = 11, scale = 8)
 	private BigDecimal lng;
 
-	@Convert(converter = AbstractCodedEnumConverter.class)
+	@Convert(converter = CategoryConverter.class)
 	private Category category;
 
 	private String storeName;
