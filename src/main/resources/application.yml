@@ -5,6 +5,7 @@ spring:
   datasource:
     driver-class-name: ${DRIVER_CLASS_NAME}
     username: ${USERNAME}
+    password: ${PASSWORD}
     url: ${URL}
 
   jpa:
