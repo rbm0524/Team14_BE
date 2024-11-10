@@ -52,10 +52,12 @@ public interface SpotMapper {
 	SpotDto toSpotDto(SpotModifyRequest spotModifyRequest);
 
 	@AfterMapping
-	default void map(SpotCreationRequest spotCreationRequest, @MappingTarget SpotDto spotDto) {
+	default SpotDto map(SpotCreationRequest spotCreationRequest, @MappingTarget SpotDto spotDto) {
 		spotDto.setCategory(
 				Category.fromStringToEnum(spotCreationRequest.category())
 						.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다.")));
+
+		return spotDto;
 	}
 
 	// Long (memberId) -> Member 객체로 변환
