@@ -20,6 +20,12 @@ public class SpotRepository {
 		return SpotMapper.INSTANCE.toDto(simpleSpotRepository.save(spot));
 	}
 
+	public List<SpotDto> findByMemberIdAndIsDeletedFalse(Long memberId) {
+		return simpleSpotRepository.findByMemberIdAndIsDeletedFalse(memberId).stream()
+				.map(SpotMapper.INSTANCE::toDto)
+				.toList();
+	}
+
 	public SpotDto findByIdAndIsDeletedFalse(Long id) {
 		return SpotMapper.INSTANCE.toDto(
 				simpleSpotRepository
@@ -31,6 +37,13 @@ public class SpotRepository {
 		return simpleSpotRepository.findByLatAndLngAndIsDeletedFalse(lat, lng).stream()
 				.map(SpotMapper.INSTANCE::toDto)
 				.toList();
+	}
+
+	public SpotDto update(SpotDto updateSpotDto) {
+		return SpotMapper.INSTANCE.toDto(
+				SpotMapper.INSTANCE.toEntity(
+						updateSpotDto,
+						SpotMapper.INSTANCE.toEntity(findByIdAndIsDeletedFalse(updateSpotDto.getId()))));
 	}
 
 	public void delete(Long id) {
