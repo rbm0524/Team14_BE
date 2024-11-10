@@ -14,4 +14,6 @@ public interface SimpleSpotRepository extends JpaRepository<Spot, Long> {
 	Optional<Spot> findByIdAndIsDeletedFalse(Long id);
 
 	List<Spot> findByGeoHash(String geoHash);
+
+	List<Spot> findByMemberIdAndIsDeletedFalse(Long memberId);
 }
