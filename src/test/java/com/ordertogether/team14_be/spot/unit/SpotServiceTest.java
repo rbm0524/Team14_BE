@@ -1,5 +1,6 @@
 package com.ordertogether.team14_be.spot.unit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -87,6 +88,15 @@ class SpotServiceTest {
 		List<SpotViewedResponse> result = spotService.getSpotByGeoHash(lat, lng);
 
 		assertFalse(result.isEmpty());
+		assertThat(result.getFirst().id()).isEqualTo(1L);
+		assertThat(result.getFirst().lat()).isEqualTo(lat);
+		assertThat(result.getFirst().lng()).isEqualTo(lng);
+		assertThat(result.getFirst().category()).isEqualTo("패스트푸드");
+		assertThat(result.getFirst().storeName()).isEqualTo(spotDto.getStoreName());
+		assertThat(result.getFirst().minimumOrderAmount()).isEqualTo(spotDto.getMinimumOrderAmount());
+		assertThat(result.getFirst().pickUpLocation()).isEqualTo(spotDto.getPickUpLocation());
+		assertThat(result.getFirst().deadlineTime()).isEqualTo(spotDto.getDeadlineTime());
+
 		verify(spotRepository).findBygeoHash(geoHashString);
 	}
 
