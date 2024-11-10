@@ -20,6 +20,7 @@ public class SpotDto {
 	@Column(precision = 11, scale = 8)
 	private BigDecimal lng;
 
+	@Setter private Long memberId;
 	@Setter private Category category;
 	private String storeName;
 	private int minimumOrderAmount;

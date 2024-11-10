@@ -1,14 +1,13 @@
 package com.ordertogether.team14_be.spot.dto.controllerdto;
 
 import java.math.BigDecimal;
-import lombok.Builder;
 
-@Builder
-public record SpotCreationResponse(
+public record SpotModifyResponse(
 		Long id,
 		BigDecimal lat,
 		BigDecimal lng,
-		String category,
 		String storeName,
+		String category,
 		Integer minimumOrderAmount,
+		String togetherOrderLink,
 		String pickUpLocation) {}
