@@ -28,7 +28,10 @@ public interface SpotMapper {
 	Spot toEntity(SpotDto spotDto);
 
 	@BeanMapping(ignoreByDefault = false)
-	@Mapping(target = "member", ignore = true) // memberId를 member로 매핑
+	@Mapping(
+			target = "member",
+			expression =
+					"java(Category.fromStringToEnum(spotCreationRequest.getCategory()).orElseThrow(() -> new IllegalArgumentException(\"존재하지 않는 카테고리입니다.\")))") // memberId를 member로 매핑
 	Spot toEntity(SpotDto spotDto, @MappingTarget Spot spot); // 생성 또는 수정할 때 사용
 
 	@BeanMapping(ignoreByDefault = false) // 자동 매핑 활성화
