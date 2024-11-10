@@ -3,6 +3,7 @@ package com.ordertogether.team14_be.spot.service;
 import ch.hsr.geohash.GeoHash;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotCreationResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotDetailResponse;
+import com.ordertogether.team14_be.spot.dto.controllerdto.SpotModifyResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotViewedResponse;
 import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
 import com.ordertogether.team14_be.spot.entity.Spot;
@@ -22,16 +23,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class SpotService {
 	private final SpotRepository spotRepository;
 
-	// Spot 전체 조회하기
+	// Spot 상세 조회하기
 	@Transactional(readOnly = true)
-	public List<SpotViewedResponse> getSpot(BigDecimal lat, BigDecimal lng) {
-		return spotRepository.findByLatAndLngAndIsDeletedFalse(lat, lng).stream()
-				.map(SpotMapper.INSTANCE::toSpotViewedResponse)
+	public List<SpotDetailResponse> getSpotDetail(Long id, Long memberId) {
+		return spotRepository.findByMemberIdAndIsDeletedFalse(memberId).stream()
+				.map(SpotMapper.INSTANCE::toSpotDetailResponse)
 				.toList();
 	}
 
 	@Transactional
-	public SpotCreationResponse createSpot(SpotDto spotDto) {
+	public SpotCreationResponse createSpot(SpotDto spotDto, Long memberId) {
+		spotDto.setMemberId(memberId);
 		GeoHash geoHash =
 				GeoHash.withCharacterPrecision(
 						spotDto.getLat().doubleValue(), spotDto.getLng().doubleValue(), 12);
@@ -42,13 +44,6 @@ public class SpotService {
 		spotDto.setModifiedBy(spotDto.getModifiedBy());
 		Spot spot = SpotMapper.INSTANCE.toEntity(spotDto, new Spot());
 		return SpotMapper.INSTANCE.toSpotCreationResponse(spotRepository.save(spot));
-	}
-
-	// Spot 상세 조회하기
-	@Transactional(readOnly = true)
-	public SpotDetailResponse getSpot(Long id) {
-		SpotDto spotDto = spotRepository.findByIdAndIsDeletedFalse(id);
-		return SpotMapper.INSTANCE.toSpotDetailResponse(spotDto);
 	}
 
 	@Transactional(readOnly = true)
@@ -64,24 +59,21 @@ public class SpotService {
 	}
 
 	@Transactional
-	public SpotDto updateSpot(SpotDto spotDto) {
-		if (!Objects.equals(spotDto.getId(), spotDto.getCreatedBy())) {
+	public SpotModifyResponse updateSpot(SpotDto spotDto, Long memberId) {
+		if (!Objects.equals(memberId, spotDto.getCreatedBy())) {
 			throw new NotSpotMasterException("작성자만 수정할 수 있습니다.");
 		}
 		spotDto.setModifiedAt(LocalDateTime.now());
-		Spot spot =
-				SpotMapper.INSTANCE.toEntity(
-						spotDto,
-						SpotMapper.INSTANCE.toEntity(
-								spotRepository.findByIdAndIsDeletedFalse(spotDto.getId())));
-		return SpotMapper.INSTANCE.toDto(spot);
+		spotDto.setMemberId(memberId);
+		SpotDto modifiedSpotDto = spotRepository.update(spotDto);
+		return SpotMapper.INSTANCE.toSpotModifyResponse(modifiedSpotDto);
 	}
 
 	@Transactional
-	public void deleteSpot(Long id) {
-		// id가 createdBy와 일치하는지 검증 후 delete
+	public void deleteSpot(Long id, Long memberId) {
 		SpotDto spotDto = spotRepository.findByIdAndIsDeletedFalse(id);
-		if (!Objects.equals(spotDto.getCreatedBy(), id)) {
+		// id가 createdBy와 일치하는지 검증 후 delete
+		if (!Objects.equals(spotDto.getCreatedBy(), memberId)) {
 			throw new IllegalArgumentException("방장이 아닌 사람은 삭제할 수 없습니다.");
 		}
 		spotRepository.delete(id);
