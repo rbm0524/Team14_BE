@@ -25,7 +25,7 @@ public class Spot extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "master_id") // PK 참조해서 master_id 속성 추가
 	private Member member;
 

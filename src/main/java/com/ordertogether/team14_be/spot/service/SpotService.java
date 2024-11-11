@@ -1,6 +1,7 @@
 package com.ordertogether.team14_be.spot.service;
 
 import ch.hsr.geohash.GeoHash;
+import com.ordertogether.team14_be.member.application.service.MemberService;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotCreationResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotDetailResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotModifyResponse;
@@ -23,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class SpotService {
+
 	private final SpotRepository spotRepository;
+	private final MemberService memberService;
 
 	// Spot 상세 조회하기
 	@Transactional(readOnly = true)
@@ -45,7 +48,7 @@ public class SpotService {
 		spotDto.setModifiedAt(LocalDateTime.now());
 		spotDto.setModifiedBy(spotDto.getMemberId());
 		log.info("SpotDto 생성 요청: {}", spotDto.toString());
-		Spot spot = SpotMapper.INSTANCE.toEntity(spotDto);
+		Spot spot = SpotMapper.INSTANCE.toEntity(spotDto, memberService);
 		log.info("Spot 생성 요청: {}", spot.toString());
 		return SpotMapper.INSTANCE.toSpotCreationResponse(spotRepository.save(spot));
 	}
