@@ -18,6 +18,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 @Table(indexes = {@Index(name = "idx_lat_lng", columnList = "lat, lng")})
 @DynamicUpdate // 변경한 필드만 대응
+@ToString
 public class Spot extends BaseEntity {
 
 	@Id

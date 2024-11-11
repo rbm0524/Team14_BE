@@ -19,7 +19,7 @@ public class SpotRepository {
 	private final SimpleSpotRepository simpleSpotRepository;
 
 	public SpotDto save(Spot spot) {
-		log.info("Spot 생성 요청: {}", spot);
+		log.info("Spot 생성 요청: {}", spot.toString());
 		return SpotMapper.INSTANCE.toDto(simpleSpotRepository.save(spot));
 	}
 
@@ -43,7 +43,7 @@ public class SpotRepository {
 	}
 
 	public SpotDto update(SpotDto updateSpotDto) {
-		log.info("Spot 수정 요청: {}", updateSpotDto);
+		log.info("Spot 수정 요청: {}", updateSpotDto.toString());
 		return SpotMapper.INSTANCE.toDto(
 				SpotMapper.INSTANCE.toEntity(
 						updateSpotDto,
