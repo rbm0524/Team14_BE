@@ -69,6 +69,7 @@ public class SpotService {
 		spotDto.setModifiedAt(LocalDateTime.now());
 		spotDto.setMemberId(memberId);
 		SpotDto modifiedSpotDto = spotRepository.update(spotDto);
+		log.info("Spot 수정 요청: {}", modifiedSpotDto);
 		return SpotMapper.INSTANCE.toSpotModifyResponse(modifiedSpotDto);
 	}
 
