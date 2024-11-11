@@ -24,6 +24,7 @@ public class SpotController {
 	@PostMapping("/api/v1/spot")
 	public ResponseEntity<SpotCreationResponse> createSpot(
 			@LoginMember Member member, @RequestBody SpotCreationRequest spotCreationRequest) {
+		log.info("Spot 생성 요청: {}", spotCreationRequest);
 		return new ResponseEntity<>(
 				spotService.createSpot(SpotMapper.INSTANCE.toSpotDto(spotCreationRequest), member.getId()),
 				HttpStatus.CREATED);
