@@ -1,6 +1,9 @@
 package com.ordertogether.team14_be.auth.persistence;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ordertogether.team14_be.auth.token.TokenContext;
 import com.ordertogether.team14_be.member.application.exception.NotFoundMember;
+import com.ordertogether.team14_be.member.persistence.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +33,14 @@ public class JwtInterceptor implements HandlerInterceptor {
 			log.debug("토큰 상태:: " + token);
 
 			if (jwtUtil.vaildToken(token)) {
-				String memberIdString = jwtUtil.decodeJwt(token).getSubject();
-				Long memberId = Long.parseLong(memberIdString);
+				ObjectMapper objectMapper = new ObjectMapper();
 
-				request.setAttribute("memberId", memberId);
+				String member = objectMapper.writeValueAsString(jwtUtil.decodeJwt(token).get("member"));
+				Member accessMember = objectMapper.readValue(member, Member.class);
+
+				request.setAttribute("member", accessMember);
+				TokenContext.addCurrentMemberId(accessMember.getId());
+				log.info("memberId : %s".formatted(accessMember.getId()));
 				return true;
 			}
 		} else {
