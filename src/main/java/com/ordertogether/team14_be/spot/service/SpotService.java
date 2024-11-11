@@ -44,6 +44,7 @@ public class SpotService {
 		spotDto.setCreatedBy(spotDto.getMemberId());
 		spotDto.setModifiedAt(LocalDateTime.now());
 		spotDto.setModifiedBy(spotDto.getMemberId());
+		log.info("SpotDto 생성 요청: {}", spotDto);
 		Spot spot = SpotMapper.INSTANCE.toEntity(spotDto);
 		log.info("Spot 생성 요청: {}", spot);
 		return SpotMapper.INSTANCE.toSpotCreationResponse(spotRepository.save(spot));

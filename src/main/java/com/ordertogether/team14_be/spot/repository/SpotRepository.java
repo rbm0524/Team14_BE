@@ -19,6 +19,7 @@ public class SpotRepository {
 	private final SimpleSpotRepository simpleSpotRepository;
 
 	public SpotDto save(Spot spot) {
+		log.info("Spot 생성 요청: {}", spot);
 		return SpotMapper.INSTANCE.toDto(simpleSpotRepository.save(spot));
 	}
 
