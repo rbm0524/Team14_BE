@@ -24,7 +24,7 @@ public interface SpotMapper {
 	SpotDto toSpotDto(SpotCreationRequest spotCreationRequest);
 
 	@BeanMapping(ignoreByDefault = false)
-	// @Mapping(target = "member", ignore = true)
+	@Mapping(target = "member", ignore = true)
 	Spot toEntity(SpotDto spotDto);
 
 	@BeanMapping(ignoreByDefault = false)
