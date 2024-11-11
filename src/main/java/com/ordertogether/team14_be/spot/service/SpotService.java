@@ -39,9 +39,9 @@ public class SpotService {
 						spotDto.getLat().doubleValue(), spotDto.getLng().doubleValue(), 12);
 		spotDto.setGeoHash(geoHash.toBase32());
 		spotDto.setCreatedAt(LocalDateTime.now());
-		spotDto.setCreatedBy(spotDto.getId());
+		spotDto.setCreatedBy(spotDto.getMemberId());
 		spotDto.setModifiedAt(LocalDateTime.now());
-		spotDto.setModifiedBy(spotDto.getModifiedBy());
+		spotDto.setModifiedBy(spotDto.getMemberId());
 		Spot spot = SpotMapper.INSTANCE.toEntity(spotDto, new Spot());
 		return SpotMapper.INSTANCE.toSpotCreationResponse(spotRepository.save(spot));
 	}
