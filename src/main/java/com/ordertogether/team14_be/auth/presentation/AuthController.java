@@ -47,9 +47,7 @@ public class AuthController {
 			@RequestHeader("Authorization") String authorizationHeader,
 			HttpServletResponse httpServletResponse) {
 		String authorizationCode = authorizationHeader.replace("Bearer ", "");
-		System.out.println("인가코드:" + authorizationCode);
 		String userKakaoEmail = kakaoAuthService.getKakaoUserEmail(authorizationCode);
-		System.out.println("이메일:" + userKakaoEmail);
 		Optional<Member> existMember = memberService.findMemberByEmail(userKakaoEmail);
 		if (existMember.isPresent()) {
 			String serviceToken = authService.getServiceToken(userKakaoEmail);
@@ -118,6 +116,6 @@ public class AuthController {
 
 		return ResponseEntity.ok()
 				.headers(headers)
-				.body(ApiResponse.with(HttpStatus.OK, "회원가입 성공", ""));
+				.body(ApiResponse.with(HttpStatus.OK, "로그아웃 성공", ""));
 	}
 }
