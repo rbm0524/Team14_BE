@@ -9,6 +9,7 @@ import com.ordertogether.team14_be.member.persistence.entity.Member;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/api/v1/auth")
+@Slf4j
 public class AuthController {
 
 	private final AuthService authService;
@@ -75,6 +77,7 @@ public class AuthController {
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
+			log.info("리다이렉트: {}", redirectUrl);
 			return ResponseEntity.ok().body(ApiResponse.with(HttpStatus.OK, "리다이렉트", redirectUrl));
 		}
 	}
@@ -115,7 +118,7 @@ public class AuthController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.SET_COOKIE, deleteCookie.toString());
-    
+
 		return ResponseEntity.ok()
 				.headers(headers)
 				.body(ApiResponse.with(HttpStatus.OK, "로그아웃 성공", ""));
