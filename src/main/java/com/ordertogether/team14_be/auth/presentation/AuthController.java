@@ -48,6 +48,7 @@ public class AuthController {
 			HttpServletResponse httpServletResponse) {
 		String authorizationCode = authorizationHeader.replace("Bearer ", "");
 		String userKakaoEmail = kakaoAuthService.getKakaoUserEmail(authorizationCode);
+		System.out.println("이메일:" + userKakaoEmail);
 		Optional<Member> existMember = memberService.findMemberByEmail(userKakaoEmail);
 		if (existMember.isPresent()) {
 			String serviceToken = authService.getServiceToken(userKakaoEmail);
@@ -102,6 +103,7 @@ public class AuthController {
 
 	@PostMapping("/logout")
 	public ResponseEntity<ApiResponse<String>> logout(HttpServletResponse response) {
+
 		ResponseCookie deleteCookie =
 				ResponseCookie.from("serviceToken", "")
 						.maxAge(0)
