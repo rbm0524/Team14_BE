@@ -72,12 +72,12 @@ public class AuthController {
 					.body(ApiResponse.with(HttpStatus.OK, "로그인 성공", serviceToken));
 		} else {
 			String redirectUrl = redirectPage + userKakaoEmail;
+			log.info("리다이렉트: {}", redirectUrl);
 			try {
 				httpServletResponse.sendRedirect(redirectUrl);
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
-			log.info("리다이렉트: {}", redirectUrl);
 			return ResponseEntity.ok().body(ApiResponse.with(HttpStatus.OK, "리다이렉트", redirectUrl));
 		}
 	}
