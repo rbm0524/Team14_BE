@@ -4,7 +4,6 @@ import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
 import com.ordertogether.team14_be.spot.entity.Spot;
 import com.ordertogether.team14_be.spot.exception.SpotNotFoundException;
 import com.ordertogether.team14_be.spot.mapper.SpotMapper;
-import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -47,14 +46,19 @@ public class SpotRepository {
 		return SpotMapper.INSTANCE.toDto(
 				SpotMapper.INSTANCE.toEntity(
 						updateSpotDto,
-						SpotMapper.INSTANCE.toEntity(findByIdAndIsDeletedFalse(updateSpotDto.getId()))));
+						simpleSpotRepository
+								.findById(updateSpotDto.getId())
+								.orElseThrow(
+										() ->
+												new SpotNotFoundException(
+														updateSpotDto.getId() + "에 해당하는 Spot을 찾을 수 없습니다."))));
 	}
 
 	public void delete(Long id) {
 		Spot spot =
 				simpleSpotRepository
 						.findByIdAndIsDeletedFalse(id)
-						.orElseThrow(() -> new EntityNotFoundException(id + "에 해당하는 Spot을 찾을 수 없습니다."));
+						.orElseThrow(() -> new SpotNotFoundException(id + "에 해당하는 Spot을 찾을 수 없습니다."));
 		spot.delete();
 	}
 

@@ -26,7 +26,9 @@ public interface SpotMapper {
 	@Mapping(target = "member", ignore = true)
 	Spot toEntity(SpotDto spotDto);
 
-	@BeanMapping(ignoreByDefault = false)
+	@BeanMapping(
+			nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+			ignoreByDefault = false)
 	Spot toEntity(SpotDto spotDto, @MappingTarget Spot spot);
 
 	@BeanMapping(ignoreByDefault = false)
@@ -55,7 +57,8 @@ public interface SpotMapper {
 
 	// SpotCreationRequest에서 SpotDto로 매핑할 때 category 매핑
 	@AfterMapping
-	default void mapCategory(SpotCreationRequest spotCreationRequest, @MappingTarget SpotDto spotDto) {
+	default void mapCategory(
+			SpotCreationRequest spotCreationRequest, @MappingTarget SpotDto spotDto) {
 		spotDto.setCategory(
 				Category.fromStringToEnum(spotCreationRequest.category())
 						.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다.")));
