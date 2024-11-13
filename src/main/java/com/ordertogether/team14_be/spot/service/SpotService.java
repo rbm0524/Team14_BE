@@ -60,8 +60,8 @@ public class SpotService {
 				GeoHash.withCharacterPrecision(lat.doubleValue(), lng.doubleValue(), precision);
 
 		String hashString = geoHash.toBase32();
-
-		List<SpotDto> resultAroundSpot = spotRepository.findBygeoHash(hashString);
+		String geoHashPrefix = hashString.substring(0, precision);
+		List<SpotDto> resultAroundSpot = spotRepository.findBygeoHash(geoHashPrefix);
 		return resultAroundSpot.stream().map(SpotMapper.INSTANCE::toSpotViewedResponse).toList();
 	}
 
