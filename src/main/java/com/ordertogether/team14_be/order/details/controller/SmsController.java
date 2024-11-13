@@ -2,8 +2,8 @@ package com.ordertogether.team14_be.order.details.controller;
 
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.member.presentation.LoginMember;
-import com.ordertogether.team14_be.order.details.sms.dto.SmsReq;
-import com.ordertogether.team14_be.order.details.sms.service.SmsService;
+import com.ordertogether.team14_be.order.details.dto.get.SmsReq;
+import com.ordertogether.team14_be.order.details.service.SmsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
