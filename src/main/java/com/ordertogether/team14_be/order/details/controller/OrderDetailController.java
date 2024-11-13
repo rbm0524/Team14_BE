@@ -12,13 +12,7 @@ import com.ordertogether.team14_be.order.details.service.OrderDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,13 +21,19 @@ public class OrderDetailController {
 
 	private final OrderDetailService orderDetailService;
 
-	// 주문 생성
+	// Spot만들면서 주문 생성
 	@PostMapping
 	public ResponseEntity<CreateOrderDetailRes> createOrderDetail(
 			@RequestBody CreateOrderDetailReq createOrderDetailReq) {
 		CreateOrderDetailRes createOrderDetailRes =
 				orderDetailService.createOrderDetail(createOrderDetailReq);
 		return ResponseEntity.ok(createOrderDetailRes);
+	}
+
+	@PostMapping
+	public ResponseEntity<CreateOrderDetailRes> participantOrder(
+			@LoginMember Member member, @RequestBody CreateOrderDetailReq dto) {
+		return ResponseEntity.ok(orderDetailService.participantOrder(member, dto));
 	}
 
 	@GetMapping

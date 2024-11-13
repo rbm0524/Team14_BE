@@ -14,7 +14,6 @@ import com.ordertogether.team14_be.order.details.entity.OrderDetail;
 import com.ordertogether.team14_be.order.details.repository.OrderDetailRepository;
 import com.ordertogether.team14_be.spot.entity.Spot;
 import com.ordertogether.team14_be.spot.repository.SimpleSpotRepository;
-import com.ordertogether.team14_be.spot.repository.SpotRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,6 @@ public class OrderDetailService {
 	private final SimpleSpotRepository simpleSpotRepository;
 	private final OrderDetailRepository orderDetailRepository;
 	private final MemberRepository memberRepository;
-	private final SpotRepository spotRepository;
 
 	// 주문 상세 정보 생성 메서드
 	@Transactional
@@ -66,6 +64,28 @@ public class OrderDetailService {
 				.participantName(savedOrderDetail.getMember().getDeliveryName())
 				.spotName(spot.getStoreName())
 				.build();
+	}
+
+	@Transactional
+	public CreateOrderDetailRes participantOrder(Member member, CreateOrderDetailReq dto) {
+		Spot spot =
+				simpleSpotRepository
+						.findById(dto.getSpotId())
+						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
+		OrderDetail orderDetail =
+				orderDetailRepository.save(
+						OrderDetail.builder()
+								.member(member)
+								.spot(spot)
+								.price(-1) // 추후 가격이 -1이면 주문이 안된 것으로 처리
+								.isPayed(false)
+								.build());
+		return new CreateOrderDetailRes(
+				orderDetail.getId(),
+				orderDetail.getPrice(),
+				orderDetail.isPayed(),
+				member.getDeliveryName(),
+				spot.getStoreName());
 	}
 
 	@Transactional(readOnly = true)
