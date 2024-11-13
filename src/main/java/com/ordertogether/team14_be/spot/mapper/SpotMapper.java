@@ -4,7 +4,6 @@ import com.ordertogether.team14_be.member.application.service.MemberService;
 import com.ordertogether.team14_be.spot.dto.controllerdto.*;
 import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
 import com.ordertogether.team14_be.spot.entity.Spot;
-import com.ordertogether.team14_be.spot.enums.Category;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -19,11 +18,15 @@ public interface SpotMapper {
 	SpotDto toDto(Spot spot);
 
 	@BeanMapping(ignoreByDefault = false)
-	@Mapping(target = "category", expression = "java(Category.fromStringToEnum(spotCreationRequest.category())") // category는 무시
+	@Mapping(
+			target = "category",
+			expression = "java(Category.fromStringToEnum(spotCreationRequest.category())") // category는 무시
 	SpotDto toSpotDto(SpotCreationRequest spotCreationRequest);
 
 	@BeanMapping(ignoreByDefault = false)
-	@Mapping(target = "member", expression = "java(Category.fromStringToEnum(spotCreationRequest.category())")
+	@Mapping(
+			target = "member",
+			expression = "java(Category.fromStringToEnum(spotCreationRequest.category())")
 	Spot toEntity(SpotDto spotDto);
 
 	@BeanMapping(
@@ -52,6 +55,8 @@ public interface SpotMapper {
 	SpotModifyResponse toSpotModifyResponse(SpotDto spotDto);
 
 	@BeanMapping(ignoreByDefault = false)
-	@Mapping(target = "category", expression = "java(Category.fromStringToEnum(spotModifyRequest.category())") // category는 무시
+	@Mapping(
+			target = "category",
+			expression = "java(Category.fromStringToEnum(spotModifyRequest.category())") // category는 무시
 	SpotDto toSpotDto(SpotModifyRequest spotModifyRequest);
 }
