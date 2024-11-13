@@ -24,9 +24,7 @@ public interface SpotMapper {
 	SpotDto toSpotDto(SpotCreationRequest spotCreationRequest);
 
 	@BeanMapping(ignoreByDefault = false)
-	@Mapping(
-			target = "member",
-			expression = "java(Category.fromStringToEnum(spotCreationRequest.category())")
+	@Mapping(target = "member", expression = "java(Category.fromStringToEnum(spotDto.category())")
 	Spot toEntity(SpotDto spotDto);
 
 	@BeanMapping(
