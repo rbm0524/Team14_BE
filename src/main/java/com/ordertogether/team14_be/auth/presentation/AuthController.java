@@ -84,7 +84,6 @@ public class AuthController {
 		String serviceToken =
 				kakaoAuthService.register(
 						email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());
-
 		ResponseCookie cookie =
 				ResponseCookie.from("serviceToken", serviceToken)
 						.httpOnly(true)
