@@ -5,7 +5,6 @@ import com.ordertogether.team14_be.member.presentation.LoginMember;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
-import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoReq;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.update.UpdateOrderPriceReq;
@@ -39,8 +38,11 @@ public class OrderDetailController {
 
 	@GetMapping
 	public ResponseEntity<GetOrdersInfoRes> getOrdersInfo(
-			@LoginMember Member member, @RequestBody @Valid GetOrdersInfoReq dto) {
-		return ResponseEntity.ok(orderDetailService.getOrdersInfo(member, dto));
+			@LoginMember Member member,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size,
+			@RequestParam(name = "sort") String sort) {
+		return ResponseEntity.ok(orderDetailService.getOrdersInfo(member, page, size, sort));
 	}
 
 	@GetMapping("/participant")

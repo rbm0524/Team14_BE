@@ -5,7 +5,6 @@ import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
-import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoReq;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.MemberBriefInfo;
@@ -70,14 +69,14 @@ public class OrderDetailService {
 	}
 
 	@Transactional(readOnly = true)
-	public GetOrdersInfoRes getOrdersInfo(Member member, GetOrdersInfoReq dto) {
+	public GetOrdersInfoRes getOrdersInfo(Member member, int page, int size, String sort) {
 		Page<OrderDetail> orderDetails =
 				orderDetailRepository.findAllByMember(
 						member,
 						PageRequest.of(
-								dto.page(),
-								dto.size(),
-								dto.sort() == null ? Sort.unsorted() : Sort.by(dto.sort().get(1))));
+								page,
+								size,
+								sort == null ? Sort.unsorted() : Sort.by(Sort.Order.desc(sort.split(",")[0]))));
 
 		return new GetOrdersInfoRes(
 				orderDetails.getTotalPages(),
