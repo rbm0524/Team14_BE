@@ -15,6 +15,7 @@ public class KakaoAuthService {
 	private final MemberService memberService;
 	private final JwtUtil jwtUtil;
 	private static final String LOGIN_PLATFORM = "KAKAO";
+	private final AuthService authService;
 
 	public String getKakaoUserEmail(String authorizationCode) {
 		String kakaoToken = kakaoClient.getAccessToken(authorizationCode);
@@ -25,6 +26,7 @@ public class KakaoAuthService {
 
 	public String register(String email, String deliveryName, String phoneNumber) {
 		Member member = new Member(email, 0, deliveryName, phoneNumber, LOGIN_PLATFORM);
+		authService.validMember(email, LOGIN_PLATFORM);
 		memberService.registerMember(member);
 		Long memberId = memberService.getMemberId(email);
 		String serviceToken = jwtUtil.generateToken(memberId);
