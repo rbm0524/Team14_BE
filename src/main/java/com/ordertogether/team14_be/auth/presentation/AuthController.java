@@ -47,7 +47,6 @@ public class AuthController {
 			@RequestHeader("Authorization") String authorizationHeader,
 			HttpServletResponse httpServletResponse) {
 		String authorizationCode = authorizationHeader.replace("Bearer ", "");
-		System.out.println("인가코드:" + authorizationCode);
 		String userKakaoEmail = kakaoAuthService.getKakaoUserEmail(authorizationCode);
 		System.out.println("이메일:" + userKakaoEmail);
 		Optional<Member> existMember = memberService.findMemberByEmail(userKakaoEmail);
@@ -102,7 +101,8 @@ public class AuthController {
 	}
 
 	@PostMapping("/logout")
-	public void logout(HttpServletResponse response) {
+	public ResponseEntity<ApiResponse<String>> logout(HttpServletResponse response) {
+
 		ResponseCookie deleteCookie =
 				ResponseCookie.from("serviceToken", "")
 						.maxAge(0)
@@ -114,5 +114,9 @@ public class AuthController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.SET_COOKIE, deleteCookie.toString());
+
+		return ResponseEntity.ok()
+				.headers(headers)
+				.body(ApiResponse.with(HttpStatus.OK, "로그아웃 성공", ""));
 	}
 }
