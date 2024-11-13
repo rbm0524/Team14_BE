@@ -26,10 +26,7 @@ public class KakaoClient {
 				restClient
 						.post()
 						.uri(URI.create(kakaoProperties.authTokenUrl()))
-						// .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-						.header(
-								HttpHeaders.CONTENT_TYPE,
-								MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=utf-8")
+						.contentType(MediaType.APPLICATION_FORM_URLENCODED)
 						.body(body)
 						.retrieve()
 						.toEntity(KakaoAccessToken.class);
