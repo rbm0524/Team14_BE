@@ -25,7 +25,7 @@ public class KakaoAuthService {
 	}
 
 	public String register(String email, String deliveryName, String phoneNumber) {
-		Member member = new Member(email, 0, deliveryName, phoneNumber, LOGIN_PLATFORM);
+		Member member = new Member(email, 0, phoneNumber, deliveryName, LOGIN_PLATFORM);
 		authService.validMember(email, LOGIN_PLATFORM);
 		memberService.registerMember(member);
 		Long memberId = memberService.getMemberId(email);
