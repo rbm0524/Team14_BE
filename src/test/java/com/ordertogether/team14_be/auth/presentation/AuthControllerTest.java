@@ -1,6 +1,7 @@
 package com.ordertogether.team14_be.auth.presentation;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -55,5 +57,30 @@ class AuthControllerTest {
 				.andExpect(header().exists(HttpHeaders.SET_COOKIE))
 				.andExpect(jsonPath("$.message").value("로그인 성공"))
 				.andExpect(jsonPath("$.data").value(serviceToken));
+	}
+
+	@Value("${FRONT_PAGE_SIGNUP}")
+	private String redirectPage;
+
+	@Test
+	void testGetToken_Redirect() throws Exception {
+		String authorizationCode = "testAuthorizationCode";
+		String kakaoEmail = "test@kakao.com";
+		String redirectUrl = redirectPage + kakaoEmail;
+
+		// Mocking the service layer
+		when(kakaoAuthService.getKakaoUserEmail(authorizationCode)).thenReturn(kakaoEmail);
+		when(memberService.findMemberByEmail(kakaoEmail)).thenReturn(Optional.empty());
+
+		// Perform the GET request
+		mockMvc
+				.perform(get("/api/v1/auth/login").header("Authorization", "Bearer " + authorizationCode))
+				.andExpect(status().isFound())
+				.andExpect(header().string(HttpHeaders.LOCATION, redirectUrl));
+		;
+
+		// Verify interactions with mocks
+		verify(kakaoAuthService).getKakaoUserEmail(authorizationCode);
+		verify(memberService).findMemberByEmail(kakaoEmail);
 	}
 }
