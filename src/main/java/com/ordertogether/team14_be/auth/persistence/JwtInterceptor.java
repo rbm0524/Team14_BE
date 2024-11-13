@@ -26,6 +26,8 @@ public class JwtInterceptor implements HandlerInterceptor {
 			return true;
 		}
 
+		logRequestDetails(request);
+
 		String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 		String token = authorization.replaceAll("Bearer ", "");
 
@@ -36,16 +38,28 @@ public class JwtInterceptor implements HandlerInterceptor {
 				ObjectMapper objectMapper = new ObjectMapper();
 
 				String member = objectMapper.writeValueAsString(jwtUtil.decodeJwt(token).get("member"));
+				log.info("member = " + member);
 				Member accessMember = objectMapper.readValue(member, Member.class);
+				log.info("accessMember = " + accessMember);
 
 				request.setAttribute("member", accessMember);
-				TokenContext.addCurrentMemberId(accessMember.getId());
-				log.info("memberId : %s".formatted(accessMember.getId()));
+				Long memberId = Long.valueOf(jwtUtil.getSubject(token));
+				log.info("memberId = " + memberId);
+				TokenContext.addCurrentMemberId(memberId);
 				return true;
 			}
 		} else {
 			throw new NotFoundMember();
 		}
 		return false;
+	}
+
+	private static void logRequestDetails(HttpServletRequest request) {
+		String clientIp = request.getHeader("X-Forwarded-For");
+		if (clientIp == null || clientIp.isEmpty()) {
+			clientIp = request.getRemoteAddr();
+		}
+		log.info("Request URI = " + request.getRequestURI());
+		log.info("Client IP = " + clientIp);
 	}
 }
