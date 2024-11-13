@@ -19,11 +19,11 @@ public interface SpotMapper {
 	SpotDto toDto(Spot spot);
 
 	@BeanMapping(ignoreByDefault = false)
-	@Mapping(target = "category", ignore = true) // category는 무시
+	@Mapping(target = "category", expression = "java(Category.fromStringToEnum(spotCreationRequest.category())") // category는 무시
 	SpotDto toSpotDto(SpotCreationRequest spotCreationRequest);
 
 	@BeanMapping(ignoreByDefault = false)
-	@Mapping(target = "member", ignore = true)
+	@Mapping(target = "member", expression = "java(Category.fromStringToEnum(spotCreationRequest.category())")
 	Spot toEntity(SpotDto spotDto);
 
 	@BeanMapping(
@@ -52,15 +52,6 @@ public interface SpotMapper {
 	SpotModifyResponse toSpotModifyResponse(SpotDto spotDto);
 
 	@BeanMapping(ignoreByDefault = false)
-	@Mapping(target = "category", ignore = true) // category는 무시
+	@Mapping(target = "category", expression = "java(Category.fromStringToEnum(spotModifyRequest.category())") // category는 무시
 	SpotDto toSpotDto(SpotModifyRequest spotModifyRequest);
-
-	// SpotCreationRequest에서 SpotDto로 매핑할 때 category 매핑
-	@AfterMapping
-	default void mapCategory(
-			SpotCreationRequest spotCreationRequest, @MappingTarget SpotDto spotDto) {
-		spotDto.setCategory(
-				Category.fromStringToEnum(spotCreationRequest.category())
-						.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다.")));
-	}
 }
