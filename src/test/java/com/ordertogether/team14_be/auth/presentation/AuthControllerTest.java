@@ -4,12 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ordertogether.team14_be.auth.application.service.AuthService;
 import com.ordertogether.team14_be.auth.application.service.KakaoAuthService;
+import com.ordertogether.team14_be.member.application.dto.MemberInfoRequest;
 import com.ordertogether.team14_be.member.application.service.MemberService;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import java.util.Optional;
@@ -68,19 +70,41 @@ class AuthControllerTest {
 		String kakaoEmail = "test@kakao.com";
 		String redirectUrl = redirectPage + kakaoEmail;
 
-		// Mocking the service layer
 		when(kakaoAuthService.getKakaoUserEmail(authorizationCode)).thenReturn(kakaoEmail);
 		when(memberService.findMemberByEmail(kakaoEmail)).thenReturn(Optional.empty());
 
-		// Perform the GET request
 		mockMvc
 				.perform(get("/api/v1/auth/login").header("Authorization", "Bearer " + authorizationCode))
 				.andExpect(status().isFound())
 				.andExpect(header().string(HttpHeaders.LOCATION, redirectUrl));
 		;
 
-		// Verify interactions with mocks
 		verify(kakaoAuthService).getKakaoUserEmail(authorizationCode);
 		verify(memberService).findMemberByEmail(kakaoEmail);
+	}
+
+	@Test
+	void testSignUpMember() throws Exception {
+		String email = "newUser@kakao.com";
+		MemberInfoRequest memberInfoRequest = new MemberInfoRequest("testName", "1234567890");
+		String serviceToken = "newServiceToken";
+
+		when(kakaoAuthService.register(
+						email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber()))
+				.thenReturn(serviceToken);
+
+		mockMvc
+				.perform(
+						post("/api/v1/auth/signup")
+								.param("email", email)
+								.contentType("application/json")
+								.content("{\"deliveryName\":\"testName\", \"phoneNumber\":\"1234567890\"}"))
+				.andExpect(status().isOk())
+				.andExpect(header().exists(HttpHeaders.SET_COOKIE))
+				.andExpect(jsonPath("$.message").value("회원가입 성공"))
+				.andExpect(jsonPath("$.data").value(serviceToken));
+
+		verify(kakaoAuthService)
+				.register(email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());
 	}
 }
