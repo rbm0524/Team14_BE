@@ -74,7 +74,7 @@ public class AuthController {
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
-			return ResponseEntity.ok().body(ApiResponse.with(HttpStatus.OK, "리다이렉트", redirectUrl));
+			return ResponseEntity.ok().body(ApiResponse.with(HttpStatus.FOUND, "리다이렉트", redirectUrl));
 		}
 	}
 
@@ -82,7 +82,7 @@ public class AuthController {
 	public ResponseEntity<ApiResponse<String>> signUpMember(
 			@RequestParam String email, @RequestBody MemberInfoRequest memberInfoRequest) {
 		String serviceToken =
-				authService.register(
+				kakaoAuthService.register(
 						email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());
 
 		ResponseCookie cookie =
