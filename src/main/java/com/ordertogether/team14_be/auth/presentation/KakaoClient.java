@@ -29,7 +29,7 @@ public class KakaoClient {
 						// .contentType(MediaType.APPLICATION_FORM_URLENCODED)
 						.header(
 								HttpHeaders.CONTENT_TYPE,
-								MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=UTF-8")
+								MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charset=utf-8")
 						.body(body)
 						.retrieve()
 						.toEntity(KakaoAccessToken.class);
