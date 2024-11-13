@@ -29,6 +29,10 @@ public class Member {
 
 	protected Member() {}
 
+	public Member(String email) {
+		this.email = email;
+	}
+
 	public Member(
 			Long id, String email, int point, String phoneNumber, String deliveryName, String platform) {
 		this.id = id;

@@ -36,11 +36,10 @@ public enum Category implements CodedEnum<String> {
 				.findFirst();
 	}
 
-	// ENUM을 코드(String)으로 변환
 	public static Optional<String> fromEnumToString(Category category) {
 		return Optional.of(category.getCode())
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."))
-				.describeConstable(); // 상수 풀에 저장되는 값을 안전하게 참조
+				.describeConstable();
 	}
 
 	@jakarta.persistence.Converter(autoApply = true)
