@@ -14,7 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,7 +39,7 @@ public class OrderDetailController {
 
 	@GetMapping
 	public ResponseEntity<GetOrdersInfoRes> getOrdersInfo(
-			@LoginMember Member member, @ModelAttribute @Valid GetOrdersInfoReq dto) {
+			@LoginMember Member member, @RequestBody @Valid GetOrdersInfoReq dto) {
 		return ResponseEntity.ok(orderDetailService.getOrdersInfo(member, dto));
 	}
 
@@ -59,7 +58,7 @@ public class OrderDetailController {
 	// 가격 수정
 	@PutMapping("/price")
 	public ResponseEntity<Void> updateOrderPrice(
-		@LoginMember Member member, @RequestBody @Valid UpdateOrderPriceReq dto) {
+			@LoginMember Member member, @RequestBody @Valid UpdateOrderPriceReq dto) {
 		orderDetailService.updateOrderPrice(member, dto);
 		return ResponseEntity.ok().build();
 	}
