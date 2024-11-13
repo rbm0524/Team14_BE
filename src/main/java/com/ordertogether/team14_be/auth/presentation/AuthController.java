@@ -82,7 +82,7 @@ public class AuthController {
 	public ResponseEntity<ApiResponse<String>> signUpMember(
 			@RequestParam String email, @RequestBody MemberInfoRequest memberInfoRequest) {
 		String serviceToken =
-				authService.register(
+				kakaoAuthService.register(
 						email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());
 
 		ResponseCookie cookie =

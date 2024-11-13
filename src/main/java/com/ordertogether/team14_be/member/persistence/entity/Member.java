@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Member {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -48,12 +47,6 @@ public class Member {
 		this.platform = platform;
 	}
 
-	public Member(String email, String phoneNumber, String deliveryName) {
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.deliveryName = deliveryName;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -72,10 +65,6 @@ public class Member {
 
 	public String getDeliveryName() {
 		return deliveryName;
-	}
-
-	public String getPlatform() {
-		return platform;
 	}
 
 	public void modifyMemberInfo(String deliveryName, String phoneNumber) {
