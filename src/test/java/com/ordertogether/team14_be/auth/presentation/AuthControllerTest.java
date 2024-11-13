@@ -1,6 +1,8 @@
 package com.ordertogether.team14_be.auth.presentation;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,6 +24,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -65,7 +68,7 @@ class AuthControllerTest {
 	private String redirectPage;
 
 	@Test
-	void testGetToken_Redirect() throws Exception {
+	void 신규회원일시_리다이렉트() throws Exception {
 		String authorizationCode = "testAuthorizationCode";
 		String kakaoEmail = "test@kakao.com";
 		String redirectUrl = redirectPage + kakaoEmail;
@@ -84,7 +87,7 @@ class AuthControllerTest {
 	}
 
 	@Test
-	void testSignUpMember() throws Exception {
+	void 회원가입() throws Exception {
 		String email = "newUser@kakao.com";
 		MemberInfoRequest memberInfoRequest = new MemberInfoRequest("testName", "1234567890");
 		String serviceToken = "newServiceToken";
@@ -106,5 +109,26 @@ class AuthControllerTest {
 
 		verify(kakaoAuthService)
 				.register(email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());
+	}
+
+	@Test
+	void 로그아웃() throws Exception {
+		ResponseCookie deleteCookie =
+				ResponseCookie.from("serviceToken", "")
+						.maxAge(0)
+						.httpOnly(true)
+						.secure(true)
+						.path("/")
+						.sameSite("Strict")
+						.build();
+
+		mockMvc
+				.perform(post("/api/v1/auth/logout"))
+				.andExpect(status().isOk())
+				.andExpect(header().exists(HttpHeaders.SET_COOKIE))
+				.andExpect(jsonPath("$.message").value("로그아웃 성공"))
+				.andExpect(jsonPath("$.data").value(""));
+
+		verify(authService, times(0)).getServiceToken(anyString());
 	}
 }
