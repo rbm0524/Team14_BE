@@ -55,7 +55,7 @@ public class SpotService {
 
 	@Transactional(readOnly = true)
 	public List<SpotViewedResponse> getSpotByGeoHash(BigDecimal lat, BigDecimal lng) {
-		int precision = 12;
+		int precision = 5; // 2.4km 정도의 정확도
 		GeoHash geoHash =
 				GeoHash.withCharacterPrecision(lat.doubleValue(), lng.doubleValue(), precision);
 
