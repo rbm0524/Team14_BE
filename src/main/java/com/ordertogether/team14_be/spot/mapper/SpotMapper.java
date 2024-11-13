@@ -4,12 +4,14 @@ import com.ordertogether.team14_be.member.application.service.MemberService;
 import com.ordertogether.team14_be.spot.dto.controllerdto.*;
 import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
 import com.ordertogether.team14_be.spot.entity.Spot;
+import com.ordertogether.team14_be.spot.enums.Category;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(
 		componentModel = "spring",
-		unmappedTargetPolicy = ReportingPolicy.IGNORE) // Spring Bean으로 등록
+		unmappedTargetPolicy = ReportingPolicy.IGNORE,
+		imports = Category.class) // Spring Bean으로 등록
 public interface SpotMapper {
 	SpotMapper INSTANCE = Mappers.getMapper(SpotMapper.class);
 
