@@ -41,4 +41,8 @@ public class OrderDetail extends BaseTimeEntity {
 	private int price;
 
 	private boolean isPayed;
+
+	public void updatePrice(int price) {
+		this.price = price;
+	}
 }
