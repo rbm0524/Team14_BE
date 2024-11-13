@@ -80,7 +80,8 @@ public class AuthController {
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
-			return ResponseEntity.ok().body(ApiResponse.with(HttpStatus.FOUND, "리다이렉트", redirectUrl));
+			return ResponseEntity.status(HttpStatus.FOUND)
+					.body(ApiResponse.with(HttpStatus.FOUND, "리다이렉트", redirectUrl));
 		}
 	}
 
