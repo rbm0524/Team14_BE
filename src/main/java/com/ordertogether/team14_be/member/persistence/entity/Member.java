@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Member {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -46,12 +45,6 @@ public class Member {
 		this.phoneNumber = phoneNumber;
 		this.deliveryName = deliveryName;
 		this.platform = platform;
-	}
-
-	public Member(String email, String phoneNumber, String deliveryName) {
-		this.email = email;
-		this.phoneNumber = phoneNumber;
-		this.deliveryName = deliveryName;
 	}
 
 	public Long getId() {
