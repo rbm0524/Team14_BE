@@ -16,7 +16,7 @@ public class AuthService {
 	}
 
 	public String register(String email, String deliveryName, String phoneNumber) {
-		Member member = new Member(email, deliveryName, phoneNumber);
+		Member member = new Member(email, phoneNumber, deliveryName);
 		memberService.registerMember(member);
 		Long memberId = memberService.getMemberId(email);
 		String serviceToken = jwtUtil.generateToken(memberId);
