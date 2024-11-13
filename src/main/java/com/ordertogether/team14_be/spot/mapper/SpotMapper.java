@@ -20,11 +20,12 @@ public interface SpotMapper {
 	@BeanMapping(ignoreByDefault = false)
 	@Mapping(
 			target = "category",
-			expression = "java(Category.fromStringToEnum(spotCreationRequest.category())") // category는 무시
+			expression =
+					"java(Category.fromStringToEnum(spotCreationRequest.category()))") // category는 무시
 	SpotDto toSpotDto(SpotCreationRequest spotCreationRequest);
 
 	@BeanMapping(ignoreByDefault = false)
-	@Mapping(target = "member", expression = "java(Category.fromStringToEnum(spotDto.category())")
+	@Mapping(target = "member", expression = "java(Category.fromStringToEnum(spotDto.category()))")
 	Spot toEntity(SpotDto spotDto);
 
 	@BeanMapping(
@@ -55,6 +56,6 @@ public interface SpotMapper {
 	@BeanMapping(ignoreByDefault = false)
 	@Mapping(
 			target = "category",
-			expression = "java(Category.fromStringToEnum(spotModifyRequest.category())") // category는 무시
+			expression = "java(Category.fromStringToEnum(spotModifyRequest.category()))") // category는 무시
 	SpotDto toSpotDto(SpotModifyRequest spotModifyRequest);
 }
