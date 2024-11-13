@@ -2,6 +2,8 @@ package com.ordertogether.team14_be.spot.service;
 
 import ch.hsr.geohash.GeoHash;
 import com.ordertogether.team14_be.member.application.service.MemberService;
+import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
+import com.ordertogether.team14_be.order.details.service.OrderDetailService;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotCreationResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotDetailResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotModifyResponse;
@@ -27,6 +29,7 @@ public class SpotService {
 
 	private final SpotRepository spotRepository;
 	private final MemberService memberService;
+	private final OrderDetailService orderDetailService;
 
 	// Spot 상세 조회하기
 	@Transactional(readOnly = true)
@@ -47,6 +50,14 @@ public class SpotService {
 		spotDto.setCreatedBy(spotDto.getMemberId());
 		spotDto.setModifiedAt(LocalDateTime.now());
 		spotDto.setModifiedBy(spotDto.getMemberId());
+		CreateOrderDetailReq createOrderDetailReq =
+				CreateOrderDetailReq.builder()
+						.price(spotDto.getMinimumOrderAmount())
+						.isPayed(false)
+						.participantId(spotDto.getMemberId())
+						.spotId(spotDto.getId())
+						.build();
+		orderDetailService.createOrderDetail(createOrderDetailReq);
 		log.info("SpotDto 생성 요청: {}", spotDto.toString());
 		Spot spot = SpotMapper.INSTANCE.toEntity(spotDto, memberService);
 		log.info("Spot 생성 요청: {}", spot.toString());
