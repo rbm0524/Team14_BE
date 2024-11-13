@@ -26,13 +26,6 @@ public interface SpotMapper {
 					"java(Category.fromStringToEnum(spotCreationRequest.category()).orElseThrow(() -> new IllegalArgumentException(\"유효하지 않은 카테고리입니다.\")))")
 	SpotDto toSpotDto(SpotCreationRequest spotCreationRequest);
 
-	@BeanMapping(ignoreByDefault = false)
-	@Mapping(
-			target = "member",
-			expression =
-					"java(Category.fromStringToEnum(spotDto.getCategory()).orElseThrow(() -> new IllegalArgumentException(\"유효하지 않은 카테고리입니다.\")))")
-	Spot toEntity(SpotDto spotDto);
-
 	@BeanMapping(
 			nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
 			ignoreByDefault = false)
