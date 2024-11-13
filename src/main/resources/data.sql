@@ -36,15 +36,3 @@ VALUES (1, 35.1766787, 126.9054188, '001', '순대나라', 5000, 'https://exampl
 
 INSERT INTO spot (master_id, lat, lng, category, store_name, minimum_order_amount, together_order_link, pick_up_location, delivery_status, deadline_time, geo_hash, is_deleted, created_at, modified_at, created_by, modified_by)
 VALUES (2, 35.1766787, 126.9054188, '001', '튀김천국', 12000, 'https://example.com/order/4', '엘리베이터 앞', 'OPEN', '23:00:00', 'wy60pg9xn84v', false, now(), now(), 4, 5);
-
-INSERT INTO order_detail (id, spot_id, participant_id, price, is_payed, created_at, modified_at)
-VALUES (1, 1, 3, 10000, true, now(), now());
-
-INSERT INTO order_detail (id, spot_id, participant_id, price, is_payed, created_at, modified_at)
-VALUES (2, 2, 3, 20000, false, now(), now());
-
-INSERT INTO order_detail (id, spot_id, participant_id, price, is_payed, created_at, modified_at)
-VALUES (3, 3, 3, 15000, true, now(), now());
-
-INSERT INTO order_detail (id, spot_id, participant_id, price, is_payed, created_at, modified_at)
-VALUES (4, 1, 1, 12000, false, now(), now());
