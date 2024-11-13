@@ -23,14 +23,14 @@ public interface SpotMapper {
 	@Mapping(
 			target = "category",
 			expression =
-					"java(Category.fromStringToEnum(spotCreationRequest.getCategory()).orElseThrow(() -> new IllegalArgumentException(\"Invalid category: \" + spotCreationRequest.getCategory())))")
+					"java(Category.fromStringToEnum(spotCreationRequest.getCategory()).orElseThrow(() -> new IllegalArgumentException(\"유효하지 않은 카테고리입니다.\")))")
 	SpotDto toSpotDto(SpotCreationRequest spotCreationRequest);
 
 	@BeanMapping(ignoreByDefault = false)
 	@Mapping(
 			target = "member",
 			expression =
-					"java(Category.fromStringToEnum(spotDto.category()).orElseThrow(() -> new IllegalArgumentException(\"Invalid category: \" + spotDtoRequest.getCategory())))")
+					"java(Category.fromStringToEnum(spotDto.category()).orElseThrow(() -> new IllegalArgumentException(\"유효하지 않은 카테고리입니다.\")))")
 	Spot toEntity(SpotDto spotDto);
 
 	@BeanMapping(
@@ -62,6 +62,6 @@ public interface SpotMapper {
 	@Mapping(
 			target = "category",
 			expression =
-					"java(Category.fromStringToEnum(spotModifyRequest.category()).orElseThrow(() -> new IllegalArgumentException(\"Invalid category: \" + spotModifyRequest.getCategory())))")
+					"java(Category.fromStringToEnum(spotModifyRequest.category()).orElseThrow(() -> new IllegalArgumentException(\"유효하지 않은 카테고리입니다.\")))")
 	SpotDto toSpotDto(SpotModifyRequest spotModifyRequest);
 }
