@@ -1,8 +1,8 @@
-package com.ordertogether.team14_be.order.details.sms.service;
+package com.ordertogether.team14_be.order.details.service;
 
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.order.details.sms.dto.SmsReq;
-import com.ordertogether.team14_be.order.details.sms.util.SmsUtil;
+import com.ordertogether.team14_be.order.details.util.SmsUtil;
 import com.ordertogether.team14_be.spot.entity.Spot;
 import com.ordertogether.team14_be.spot.repository.SimpleSpotRepository;
 import lombok.RequiredArgsConstructor;

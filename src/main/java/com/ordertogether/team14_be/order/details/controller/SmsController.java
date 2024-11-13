@@ -1,4 +1,4 @@
-package com.ordertogether.team14_be.order.details.sms.controller;
+package com.ordertogether.team14_be.order.details.controller;
 
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.member.presentation.LoginMember;

@@ -1,4 +1,4 @@
-package com.ordertogether.team14_be.order.details.sms.util;
+package com.ordertogether.team14_be.order.details.util;
 
 import jakarta.annotation.PostConstruct;
 import net.nurigo.sdk.NurigoApp;
