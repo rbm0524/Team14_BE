@@ -49,10 +49,11 @@ public class AuthController {
 			@RequestHeader("Authorization") String authorizationHeader,
 			HttpServletResponse httpServletResponse) {
 		String authorizationCode = authorizationHeader.replace("Bearer ", "");
-		System.out.println("인가코드:" + authorizationCode);
+		log.info("인가 코드: {}", authorizationCode);
 		String userKakaoEmail = kakaoAuthService.getKakaoUserEmail(authorizationCode);
-		System.out.println("이메일:" + userKakaoEmail);
+		log.info("카카오 이메일: {}", userKakaoEmail);
 		Optional<Member> existMember = memberService.findMemberByEmail(userKakaoEmail);
+		log.info("회원: {}", existMember);
 		if (existMember.isPresent()) {
 			String serviceToken = authService.getServiceToken(userKakaoEmail);
 
@@ -63,6 +64,7 @@ public class AuthController {
 							.path("/")
 							.sameSite("Strict")
 							.build();
+			log.info("쿠키: {}", cookie);
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -88,7 +90,7 @@ public class AuthController {
 		String serviceToken =
 				authService.register(
 						email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());
-
+		log.info("서비스 토큰: {}", serviceToken);
 		ResponseCookie cookie =
 				ResponseCookie.from("serviceToken", serviceToken)
 						.httpOnly(true)

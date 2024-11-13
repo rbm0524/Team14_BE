@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import ch.hsr.geohash.GeoHash;
+import com.ordertogether.team14_be.member.application.service.MemberService;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotCreationResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotModifyResponse;
@@ -16,8 +17,6 @@ import com.ordertogether.team14_be.spot.enums.Category;
 import com.ordertogether.team14_be.spot.exception.NotSpotMasterException;
 import com.ordertogether.team14_be.spot.repository.SpotRepository;
 import com.ordertogether.team14_be.spot.service.SpotService;
-import com.ordertogether.team14_be.member.application.service.MemberService;
-
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.List;
@@ -66,7 +65,8 @@ class SpotServiceTest {
 	@Test
 	void createSpot_success() {
 		when(spotRepository.save(any(Spot.class))).thenReturn(spotDto);
-		when(memberService.findMember(1L)).thenReturn(new Member(1L, "example@naver.com", 12000, "010-1234-1234", "닉네임", "배민"));
+		when(memberService.findMember(1L))
+				.thenReturn(new Member(1L, "example@naver.com", 12000, "010-1234-1234", "닉네임", "배민"));
 		SpotCreationResponse response = spotService.createSpot(spotDto, 1L);
 
 		assertNotNull(response);
