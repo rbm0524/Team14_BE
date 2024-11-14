@@ -1,6 +1,5 @@
 package com.ordertogether.team14_be.spot.enums;
 
-import com.ordertogether.team14_be.spot.converter.AbstractCodedEnumConverter;
 import com.ordertogether.team14_be.spot.converter.CodedEnum;
 import java.util.Arrays;
 import java.util.Optional;
@@ -26,12 +25,5 @@ public enum DeliveryStatus implements CodedEnum<String> {
 		return Optional.of(status.getCode())
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 배달 상태입니다."))
 				.describeConstable();
-	}
-
-	@jakarta.persistence.Converter
-	static class Converter extends AbstractCodedEnumConverter<DeliveryStatus, String> {
-		public Converter() {
-			super(DeliveryStatus.class);
-		}
 	}
 }
