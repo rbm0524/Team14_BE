@@ -3,6 +3,7 @@ package com.ordertogether.team14_be.spot.entity;
 import com.ordertogether.team14_be.common.persistence.entity.BaseEntity;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.spot.converter.CategoryConverter;
+import com.ordertogether.team14_be.spot.converter.DeliveryStatusConverter;
 import com.ordertogether.team14_be.spot.enums.Category;
 import com.ordertogether.team14_be.spot.enums.DeliveryStatus;
 import jakarta.persistence.*;
@@ -47,7 +48,11 @@ public class Spot extends BaseEntity {
 	private String togetherOrderLink;
 
 	private String pickUpLocation;
-	@Builder.Default private DeliveryStatus deliveryStatus = DeliveryStatus.DELIVERING;
+
+	@Convert(converter = DeliveryStatusConverter.class)
+	@Builder.Default
+	private DeliveryStatus deliveryStatus = DeliveryStatus.DELIVERING;
+
 	private LocalTime deadlineTime;
 	private String geoHash;
 	@Builder.Default private Boolean isDeleted = false;
