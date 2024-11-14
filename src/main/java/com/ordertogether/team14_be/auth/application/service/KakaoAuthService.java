@@ -7,6 +7,7 @@ import com.ordertogether.team14_be.member.application.service.MemberService;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 
 @RequiredArgsConstructor
 @Service
@@ -18,10 +19,15 @@ public class KakaoAuthService {
 	private final AuthService authService;
 
 	public String getKakaoUserEmail(String authorizationCode) {
-		String kakaoToken = kakaoClient.getAccessToken(authorizationCode);
-		KakaoUserInfo kakaoUserInfo = kakaoClient.getUserInfo((kakaoToken));
-		String userKakaoEmail = kakaoUserInfo.kakaoAccount().email();
-		return userKakaoEmail;
+		try {
+			String kakaoToken = kakaoClient.getAccessToken(authorizationCode);
+			KakaoUserInfo kakaoUserInfo = kakaoClient.getUserInfo((kakaoToken));
+			String userKakaoEmail = kakaoUserInfo.kakaoAccount().email();
+			return userKakaoEmail;
+		} catch (RestClientException e) {
+			System.err.println(e.getMessage());
+			return null;
+		}
 	}
 
 	public String register(String email, String deliveryName, String phoneNumber) {
