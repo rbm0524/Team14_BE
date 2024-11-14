@@ -13,12 +13,14 @@ public abstract class AbstractCodedEnumConverter<T extends Enum<T> & CodedEnum<E
 		this.clazz = clazz;
 	}
 
-	@SuppressWarnings("unchecked") // 경고 억제
 	@Override
 	// Entity의 enum값을 DB에 변환하는 방식을 정의
 	public E convertToDatabaseColumn(
 			T attribute) { // Converts the value stored in the entity attribute into the data
 		// representation to be stored in the database.
+		if (Objects.isNull(attribute)) {
+			return null;
+		}
 		return attribute.getCode(); // 코드 저장 ex) KOREAN_STEW -> "002"
 	}
 
