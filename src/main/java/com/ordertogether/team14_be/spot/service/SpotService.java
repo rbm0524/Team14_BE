@@ -10,7 +10,6 @@ import com.ordertogether.team14_be.spot.dto.controllerdto.SpotModifyResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotViewedResponse;
 import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
 import com.ordertogether.team14_be.spot.enums.DeliveryStatus;
-import com.ordertogether.team14_be.spot.exception.NotSpotMasterException;
 import com.ordertogether.team14_be.spot.mapper.SpotMapper;
 import com.ordertogether.team14_be.spot.repository.SpotRepository;
 import java.math.BigDecimal;
@@ -77,9 +76,6 @@ public class SpotService {
 
 	@Transactional
 	public SpotModifyResponse updateSpot(SpotDto spotDto, Long memberId) {
-		if (!Objects.equals(memberId, spotDto.getCreatedBy())) {
-			throw new NotSpotMasterException("작성자만 수정할 수 있습니다.");
-		}
 		spotDto.setModifiedAt(LocalDateTime.now());
 		spotDto.setMemberId(memberId);
 		SpotDto modifiedSpotDto = spotRepository.update(spotDto);
