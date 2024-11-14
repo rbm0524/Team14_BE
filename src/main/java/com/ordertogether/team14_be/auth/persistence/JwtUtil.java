@@ -41,6 +41,10 @@ public class JwtUtil {
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 	}
 
+	public String getSubject(String token) {
+		return decodeJwt(token).getSubject();
+	}
+
 	public boolean vaildToken(String token) throws InvalidToken {
 		try {
 			Claims claims =
