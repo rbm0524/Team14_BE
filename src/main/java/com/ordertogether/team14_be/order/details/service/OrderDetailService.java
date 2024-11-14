@@ -4,11 +4,13 @@ import com.ordertogether.team14_be.member.persistence.MemberRepository;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
+import com.ordertogether.team14_be.order.details.dto.delete.DeleteOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.MemberBriefInfo;
 import com.ordertogether.team14_be.order.details.dto.get.OrderInfo;
+import com.ordertogether.team14_be.order.details.dto.update.CompleteOrderReq;
 import com.ordertogether.team14_be.order.details.dto.update.UpdateOrderPriceReq;
 import com.ordertogether.team14_be.order.details.entity.OrderDetail;
 import com.ordertogether.team14_be.order.details.repository.OrderDetailRepository;
@@ -74,6 +76,10 @@ public class OrderDetailService {
 				simpleSpotRepository
 						.findById(dto.getSpotId())
 						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
+
+		if (member.getId().equals(spot.getMember().getId()))
+			throw new IllegalArgumentException("방장입니다.(참여자만 사용 가능)");
+
 		OrderDetail orderDetail =
 				orderDetailRepository.save(
 						OrderDetail.builder()
@@ -186,5 +192,43 @@ public class OrderDetailService {
 
 		orderDetail.updatePrice(dto.price());
 		orderDetailRepository.save(orderDetail);
+	}
+
+	@Transactional
+	public void completeOrder(Member member, CompleteOrderReq dto) {
+		OrderDetail orderDetail =
+				orderDetailRepository
+						.findById(dto.spotId())
+						.orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
+
+		if (!orderDetail.getMember().getId().equals(member.getId())) {
+			throw new IllegalArgumentException("주문의 참여자가 아닙니다.");
+		}
+
+		orderDetail.updateIsPayed(true);
+		orderDetailRepository.save(orderDetail);
+	}
+
+	@Transactional
+	public void deleteOrderDetail(Member member, DeleteOrderDetailReq dto) {
+		Spot spot =
+				simpleSpotRepository
+						.findById(dto.spotId())
+						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
+		Member creator = spot.getMember();
+
+		if (member.getId().equals(creator.getId()))
+			throw new IllegalArgumentException("방장입니다.(참여자만 사용 가능)");
+
+		OrderDetail orderDetail =
+				orderDetailRepository
+						.findBySpotAndMember(spot, member)
+						.orElseThrow(() -> new IllegalArgumentException("주문 정보가 없습니다."));
+
+		if (!orderDetail.getMember().getId().equals(member.getId())) {
+			throw new IllegalArgumentException("주문의 참여자가 아닙니다.");
+		}
+
+		orderDetailRepository.delete(orderDetail);
 	}
 }
