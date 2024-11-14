@@ -25,10 +25,6 @@ public interface SpotMapper {
 			target = "category",
 			expression =
 					"java(Category.fromStringToEnum(spotCreationRequest.category()).orElseThrow(() -> new IllegalArgumentException(\"유효하지 않은 카테고리입니다.\")))")
-	@Mapping(
-			target = "deliveryStatus",
-			expression =
-					"java(DeliveryStatus.fromStringToEnum(spotCreationRequest.deliveryStatus()).orElseThrow(() -> new IllegalArgumentException(\"유효하지 않은 배달 상태입니다.\")))")
 	SpotDto toSpotDto(SpotCreationRequest spotCreationRequest);
 
 	@BeanMapping(
