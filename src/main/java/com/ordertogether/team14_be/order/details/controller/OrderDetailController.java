@@ -22,7 +22,7 @@ public class OrderDetailController {
 	private final OrderDetailService orderDetailService;
 
 	// Spot만들면서 주문 생성
-	@PostMapping
+	// @PostMapping
 	public ResponseEntity<CreateOrderDetailRes> createOrderDetail(
 			@RequestBody CreateOrderDetailReq createOrderDetailReq) {
 		CreateOrderDetailRes createOrderDetailRes =
