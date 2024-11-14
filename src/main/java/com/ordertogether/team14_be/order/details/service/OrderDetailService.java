@@ -149,9 +149,10 @@ public class OrderDetailService {
 		if (!member.getId().equals(creator.getId()))
 			throw new IllegalArgumentException("참여자입니다.(방장만 사용 가능)");
 
-		List<OrderDetail> filteredOrders = orderDetailRepository.findAllBySpot(spot).stream()
-					.filter(order -> !order.getMember().getId().equals(creator.getId()))
-					.toList(); //creator의 id가 아닌 것만 필터링
+		List<OrderDetail> filteredOrders =
+				orderDetailRepository.findAllBySpot(spot).stream()
+						.filter(order -> !order.getMember().getId().equals(creator.getId()))
+						.toList(); // creator의 id가 아닌 것만 필터링
 
 		return new GetCreatorOrderInfoRes(
 				spot.getCategory().toString(),
