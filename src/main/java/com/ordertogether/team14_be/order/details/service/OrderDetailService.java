@@ -194,7 +194,7 @@ public class OrderDetailService {
 	public void completeOrder(Member member, CompleteOrderReq dto) {
 		OrderDetail orderDetail =
 				orderDetailRepository
-						.findById(dto.or)
+						.findById(dto.spotId())
 						.orElseThrow(() -> new IllegalArgumentException("주문 정보를 찾을 수 없습니다."));
 
 		if (!orderDetail.getMember().getId().equals(member.getId())) {
