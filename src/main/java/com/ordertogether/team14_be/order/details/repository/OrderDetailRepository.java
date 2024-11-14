@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 	@EntityGraph(attributePaths = {"spot"})
-	Page<OrderDetail> findAllByMember(Member member, Pageable pageable);
+	Page<OrderDetail> findByMember(Member member, Pageable pageable);
 
 	Optional<OrderDetail> findBySpotAndMember(Spot spot, Member member);
 

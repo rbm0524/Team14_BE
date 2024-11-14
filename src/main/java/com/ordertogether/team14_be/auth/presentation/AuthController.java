@@ -9,21 +9,17 @@ import com.ordertogether.team14_be.member.persistence.entity.Member;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/auth")
+@Slf4j
 public class AuthController {
 
 	private final AuthService authService;
@@ -47,9 +43,11 @@ public class AuthController {
 			@RequestHeader("Authorization") String authorizationHeader,
 			HttpServletResponse httpServletResponse) {
 		String authorizationCode = authorizationHeader.replace("Bearer ", "");
+		log.info("인가 코드: {}", authorizationCode);
 		String userKakaoEmail = kakaoAuthService.getKakaoUserEmail(authorizationCode);
-		System.out.println("이메일:" + userKakaoEmail);
+		log.info("카카오 이메일: {}", userKakaoEmail);
 		Optional<Member> existMember = memberService.findMemberByEmail(userKakaoEmail);
+		log.info("회원: {}", existMember);
 		if (existMember.isPresent()) {
 			String serviceToken = authService.getServiceToken(userKakaoEmail);
 
@@ -60,6 +58,7 @@ public class AuthController {
 							.path("/")
 							.sameSite("Strict")
 							.build();
+			log.info("쿠키: {}", cookie);
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.add(HttpHeaders.SET_COOKIE, cookie.toString());
@@ -69,12 +68,14 @@ public class AuthController {
 					.body(ApiResponse.with(HttpStatus.OK, "로그인 성공", serviceToken));
 		} else {
 			String redirectUrl = redirectPage + userKakaoEmail;
+			log.info("리다이렉트: {}", redirectUrl);
 			try {
 				httpServletResponse.sendRedirect(redirectUrl);
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
-			return ResponseEntity.ok().body(ApiResponse.with(HttpStatus.FOUND, "리다이렉트", redirectUrl));
+			return ResponseEntity.status(HttpStatus.FOUND)
+					.body(ApiResponse.with(HttpStatus.FOUND, "리다이렉트", redirectUrl));
 		}
 	}
 
@@ -84,6 +85,7 @@ public class AuthController {
 		String serviceToken =
 				kakaoAuthService.register(
 						email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());
+		log.info("서비스 토큰: {}", serviceToken);
 		ResponseCookie cookie =
 				ResponseCookie.from("serviceToken", serviceToken)
 						.httpOnly(true)
@@ -102,7 +104,6 @@ public class AuthController {
 
 	@PostMapping("/logout")
 	public ResponseEntity<ApiResponse<String>> logout(HttpServletResponse response) {
-
 		ResponseCookie deleteCookie =
 				ResponseCookie.from("serviceToken", "")
 						.maxAge(0)

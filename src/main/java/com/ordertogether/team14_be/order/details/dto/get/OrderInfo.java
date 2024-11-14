@@ -5,6 +5,7 @@ import com.ordertogether.team14_be.spot.entity.Spot;
 
 public record OrderInfo(
 		Long id,
+		Long spotId,
 		String category,
 		String storeName,
 		int minimumOrderAmount,
@@ -16,6 +17,7 @@ public record OrderInfo(
 	public OrderInfo(Long memberId, OrderDetail order, Spot spot) {
 		this(
 				order.getId(),
+				spot.getId(),
 				spot.getCategory().toString(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),

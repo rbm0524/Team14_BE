@@ -5,7 +5,6 @@ import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
-import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoReq;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.MemberBriefInfo;
@@ -15,9 +14,9 @@ import com.ordertogether.team14_be.order.details.entity.OrderDetail;
 import com.ordertogether.team14_be.order.details.repository.OrderDetailRepository;
 import com.ordertogether.team14_be.spot.entity.Spot;
 import com.ordertogether.team14_be.spot.repository.SimpleSpotRepository;
-import com.ordertogether.team14_be.spot.repository.SpotRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -26,11 +25,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderDetailService {
 	private final SimpleSpotRepository simpleSpotRepository;
 	private final OrderDetailRepository orderDetailRepository;
 	private final MemberRepository memberRepository;
-	private final SpotRepository spotRepository;
 
 	// 주문 상세 정보 생성 메서드
 	@Transactional
@@ -69,15 +68,42 @@ public class OrderDetailService {
 				.build();
 	}
 
+	@Transactional
+	public CreateOrderDetailRes participantOrder(Member member, CreateOrderDetailReq dto) {
+		Spot spot =
+				simpleSpotRepository
+						.findById(dto.getSpotId())
+						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
+		OrderDetail orderDetail =
+				orderDetailRepository.save(
+						OrderDetail.builder()
+								.member(member)
+								.spot(spot)
+								.price(-1) // 추후 가격이 -1이면 주문이 안된 것으로 처리
+								.isPayed(false)
+								.build());
+		return new CreateOrderDetailRes(
+				orderDetail.getId(),
+				orderDetail.getPrice(),
+				orderDetail.isPayed(),
+				member.getDeliveryName(),
+				spot.getStoreName());
+	}
+
 	@Transactional(readOnly = true)
-	public GetOrdersInfoRes getOrdersInfo(Member member, GetOrdersInfoReq dto) {
+	public GetOrdersInfoRes getOrdersInfo(Member member, int page, int size, String sort) {
 		Page<OrderDetail> orderDetails =
-				orderDetailRepository.findAllByMember(
+				orderDetailRepository.findByMember(
 						member,
 						PageRequest.of(
-								dto.page(),
-								dto.size(),
-								dto.sort() == null ? Sort.unsorted() : Sort.by(dto.sort().get(1))));
+								page,
+								size,
+								sort == null ? Sort.unsorted() : Sort.by(Sort.Order.desc(sort.split(",")[0]))));
+
+		log.info("orderDetails: {}", orderDetails);
+		log.info("orderDetails.getTotalPages(): {}", orderDetails.getTotalPages());
+		log.info("orderDetails.getTotalElements(): {}", orderDetails.getTotalElements());
+		log.info("orderDetails.getContent(): {}", orderDetails.getContent());
 
 		return new GetOrdersInfoRes(
 				orderDetails.getTotalPages(),
@@ -123,7 +149,10 @@ public class OrderDetailService {
 		if (!member.getId().equals(creator.getId()))
 			throw new IllegalArgumentException("참여자입니다.(방장만 사용 가능)");
 
-		List<OrderDetail> orders = orderDetailRepository.findAllBySpot(spot);
+		List<OrderDetail> filteredOrders =
+				orderDetailRepository.findAllBySpot(spot).stream()
+						.filter(order -> !order.getMember().getId().equals(creator.getId()))
+						.toList(); // creator의 id가 아닌 것만 필터링
 
 		return new GetCreatorOrderInfoRes(
 				spot.getCategory().toString(),
@@ -131,7 +160,7 @@ public class OrderDetailService {
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
 				spot.getDeliveryStatus(),
-				orders.stream()
+				filteredOrders.stream()
 						.map(
 								order -> {
 									Member participant = order.getMember();

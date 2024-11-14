@@ -84,4 +84,13 @@ public class Member {
 		this.point += point;
 		return this.point;
 	}
+
+	public Integer decreasePoint(int point) {
+		if (this.point < point) {
+			throw new IllegalArgumentException(
+					"보유한 포인트가 부족합니다. [잔액 : %s, 요청량 : %s]".formatted(this.point, point));
+		}
+		this.point -= point;
+		return this.point;
+	}
 }

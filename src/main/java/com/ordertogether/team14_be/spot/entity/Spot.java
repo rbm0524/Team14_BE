@@ -18,13 +18,14 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 @Table(indexes = {@Index(name = "idx_lat_lng", columnList = "lat, lng")})
 @DynamicUpdate // 변경한 필드만 대응
+@ToString
 public class Spot extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "master_id") // PK 참조해서 master_id 속성 추가
 	private Member member;
 
