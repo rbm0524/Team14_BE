@@ -16,6 +16,7 @@ import com.ordertogether.team14_be.spot.entity.Spot;
 import com.ordertogether.team14_be.spot.repository.SimpleSpotRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderDetailService {
 	private final SimpleSpotRepository simpleSpotRepository;
 	private final OrderDetailRepository orderDetailRepository;
@@ -97,6 +99,11 @@ public class OrderDetailService {
 								page,
 								size,
 								sort == null ? Sort.unsorted() : Sort.by(Sort.Order.desc(sort.split(",")[0]))));
+
+		log.info("orderDetails: {}", orderDetails);
+		log.info("orderDetails.getTotalPages(): {}", orderDetails.getTotalPages());
+		log.info("orderDetails.getTotalElements(): {}", orderDetails.getTotalElements());
+		log.info("orderDetails.getContent(): {}", orderDetails.getContent());
 
 		return new GetOrdersInfoRes(
 				orderDetails.getTotalPages(),
