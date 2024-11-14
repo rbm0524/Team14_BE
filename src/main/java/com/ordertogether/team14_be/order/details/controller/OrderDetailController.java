@@ -42,7 +42,9 @@ public class OrderDetailController {
 			@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size,
 			@RequestParam(name = "sort") String sort) {
-		return ResponseEntity.ok(orderDetailService.getOrdersInfo(member, page-1, size, sort)); //page는 0부터 시작, (프론트는 1부터 시작이므로)
+		return ResponseEntity.ok(
+				orderDetailService.getOrdersInfo(
+						member, page - 1, size, sort)); // page는 0부터 시작, (프론트는 1부터 시작이므로)
 	}
 
 	@GetMapping("/participant/{spotId}")
