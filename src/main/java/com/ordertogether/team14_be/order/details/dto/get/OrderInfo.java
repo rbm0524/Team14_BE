@@ -24,7 +24,7 @@ public record OrderInfo(
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
-				spot.getDeliveryStatus(),
+				spot.getDeliveryStatus().getStatus(),
 				order.getCreatedAt().toLocalDate(),
 				order.getPrice(),
 				spot.getMember().getId().equals(memberId));
