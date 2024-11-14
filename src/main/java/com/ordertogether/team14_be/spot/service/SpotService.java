@@ -15,7 +15,6 @@ import com.ordertogether.team14_be.spot.repository.SpotRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -84,12 +83,7 @@ public class SpotService {
 	}
 
 	@Transactional
-	public void deleteSpot(Long id, Long memberId) {
-		SpotDto spotDto = spotRepository.findByIdAndIsDeletedFalse(id);
-		// id가 createdBy와 일치하는지 검증 후 delete
-		if (!Objects.equals(spotDto.getCreatedBy(), memberId)) {
-			throw new IllegalArgumentException("방장이 아닌 사람은 삭제할 수 없습니다.");
-		}
+	public void deleteSpot(Long id) {
 		spotRepository.delete(id);
 	}
 

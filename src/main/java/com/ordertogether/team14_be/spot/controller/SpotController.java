@@ -62,7 +62,7 @@ public class SpotController {
 	// Spot 삭제하기
 	@DeleteMapping("/api/v1/spot/{id}")
 	public ResponseEntity<Void> deleteSpot(@LoginMember Member member, @PathVariable Long id) {
-		spotService.deleteSpot(id, member.getId()); // id는 SpotId임
+		spotService.deleteSpot(id); // id는 SpotId임
 		return ResponseEntity.ok().build();
 	}
 }
