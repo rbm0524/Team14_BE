@@ -3,7 +3,7 @@ package com.ordertogether.team14_be.spot.converter;
 import com.ordertogether.team14_be.spot.enums.Category;
 import jakarta.persistence.Converter;
 
-@Converter
+@Converter(autoApply = true)
 public class CategoryConverter extends AbstractCodedEnumConverter<Category, String> {
 
 	public CategoryConverter() {

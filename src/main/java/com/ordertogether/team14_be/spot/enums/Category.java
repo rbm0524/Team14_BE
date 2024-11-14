@@ -1,5 +1,6 @@
 package com.ordertogether.team14_be.spot.enums;
 
+import com.ordertogether.team14_be.spot.converter.AbstractCodedEnumConverter;
 import com.ordertogether.team14_be.spot.converter.CodedEnum;
 import java.util.Arrays;
 import java.util.Optional;
@@ -40,6 +41,13 @@ public enum Category implements CodedEnum<String> {
 		return Optional.of(category.getCode())
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."))
 				.describeConstable(); // 상수 풀에 저장되는 값을 안전하게 참조
+	}
+
+	@jakarta.persistence.Converter(autoApply = true)
+	static class Converter extends AbstractCodedEnumConverter<Category, String> {
+		public Converter() {
+			super(Category.class);
+		}
 	}
 
 	/*
