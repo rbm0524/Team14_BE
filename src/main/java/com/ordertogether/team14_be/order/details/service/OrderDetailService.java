@@ -76,6 +76,10 @@ public class OrderDetailService {
 				simpleSpotRepository
 						.findById(dto.getSpotId())
 						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
+
+		if (member.getId().equals(spot.getMember().getId()))
+			throw new IllegalArgumentException("방장입니다.(참여자만 사용 가능)");
+
 		OrderDetail orderDetail =
 				orderDetailRepository.save(
 						OrderDetail.builder()
