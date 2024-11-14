@@ -2,26 +2,21 @@ package com.ordertogether.team14_be.order.details.controller;
 
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.member.presentation.LoginMember;
-import com.ordertogether.team14_be.order.details.dto.get.SmsReq;
 import com.ordertogether.team14_be.order.details.service.SmsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/spot/sms")
+@RequestMapping("/api/v1/spot/sms/{spotId}")
 public class SmsController {
 
 	private final SmsService smsService;
 
 	@GetMapping
-	public ResponseEntity<Void> getOrdersInfo(
-			@LoginMember Member member, @RequestBody SmsReq smsReq) {
-		smsService.sendLinkToParticipant(member, smsReq);
+	public ResponseEntity<Void> getOrdersInfo(@LoginMember Member member, @PathVariable Long spotId) {
+		smsService.sendLinkToParticipant(member, spotId);
 		return ResponseEntity.ok().build();
 	}
 }

@@ -1,7 +1,6 @@
 package com.ordertogether.team14_be.order.details.service;
 
 import com.ordertogether.team14_be.member.persistence.entity.Member;
-import com.ordertogether.team14_be.order.details.dto.get.SmsReq;
 import com.ordertogether.team14_be.order.details.util.SmsUtil;
 import com.ordertogether.team14_be.spot.entity.Spot;
 import com.ordertogether.team14_be.spot.repository.SimpleSpotRepository;
@@ -15,13 +14,13 @@ public class SmsService {
 	private final SmsUtil smsUtil;
 	private final SimpleSpotRepository simpleSpotRepository;
 
-	public ResponseEntity<?> sendLinkToParticipant(Member member, SmsReq smsReq) {
+	public ResponseEntity<?> sendLinkToParticipant(Member member, Long spotId) {
 		// 수신번호 형태에 맞춰 "-"을 ""로 변환
 		String phoneNum = member.getPhoneNumber().replaceAll("-", "");
 
 		Spot spot =
 				simpleSpotRepository
-						.findById(smsReq.spotId())
+						.findById(spotId)
 						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
 
 		String link = spot.getTogetherOrderLink();
