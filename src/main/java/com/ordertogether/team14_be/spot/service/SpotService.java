@@ -44,7 +44,7 @@ public class SpotService {
 		spotDto.setMemberId(memberId);
 		GeoHash geoHash =
 				GeoHash.withCharacterPrecision(
-						spotDto.getLat().doubleValue(), spotDto.getLng().doubleValue(), 12);
+						spotDto.getLat().doubleValue(), spotDto.getLng().doubleValue(), 5);
 		spotDto.setGeoHash(geoHash.toBase32());
 		spotDto.setCreatedAt(LocalDateTime.now());
 		spotDto.setCreatedBy(spotDto.getMemberId());
@@ -58,9 +58,7 @@ public class SpotService {
 						.spotId(spotDto.getId())
 						.build();
 		log.info("SpotDto 생성 요청: {}", spotDto.toString());
-		Spot spot = SpotMapper.INSTANCE.toEntity(spotDto, memberService);
-		log.info("Spot 생성 요청: {}", spot.toString());
-		SpotDto savedSpotDto = spotRepository.save(spot);
+		SpotDto savedSpotDto = spotRepository.save(SpotMapper.INSTANCE.toEntity(spotDto, memberService));
 		orderDetailService.createOrderDetail(createOrderDetailReq);
 		return SpotMapper.INSTANCE.toSpotCreationResponse(savedSpotDto);
 	}

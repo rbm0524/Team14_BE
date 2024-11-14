@@ -19,7 +19,7 @@ public class SpotRepository {
 
 	public SpotDto save(Spot spot) {
 		log.info("Spot 생성 요청: {}", spot.toString());
-		return SpotMapper.INSTANCE.toDto(simpleSpotRepository.save(spot));
+		return SpotMapper.INSTANCE.toDto(simpleSpotRepository.saveAndFlush(spot));
 	}
 
 	public List<SpotDto> findByMemberIdAndIsDeletedFalse(Long memberId) {
