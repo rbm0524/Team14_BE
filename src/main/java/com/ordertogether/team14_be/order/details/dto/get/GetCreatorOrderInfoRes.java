@@ -1,5 +1,6 @@
 package com.ordertogether.team14_be.order.details.dto.get;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public record GetCreatorOrderInfoRes(
@@ -8,4 +9,5 @@ public record GetCreatorOrderInfoRes(
 		int minimumOrderAmount,
 		String pickUpLocation,
 		String deliveryStatus,
+		LocalDateTime orderDate,
 		List<MemberBriefInfo> memberInfo) {}
