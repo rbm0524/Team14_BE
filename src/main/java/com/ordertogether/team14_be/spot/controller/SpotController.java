@@ -32,9 +32,9 @@ public class SpotController {
 
 	// Spot 상세 조회하기
 	@GetMapping("/api/v1/spot/{id}")
-	public ResponseEntity<List<SpotDetailResponse>> getSpotDetail(
+	public ResponseEntity<SpotDetailResponse> getSpotDetail(
 			@LoginMember Member member, @PathVariable Long id) {
-		return ResponseEntity.ok(spotService.getSpotDetail(id, member.getId()));
+		return ResponseEntity.ok(spotService.getSpotDetail(id));
 	}
 
 	// 반경 n미터 내 Spot 조회하기 - 전체 조회
