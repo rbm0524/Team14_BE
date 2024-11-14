@@ -44,7 +44,7 @@ public interface SpotMapper {
 	@Mapping(target = "category", expression = "java(spotDto.getCategory().getStringCategory())")
 	@Mapping(
 			target = "deliveryStatus",
-			expression = "java(spotDto.getDeliveryStatus().getStringDeliveryStatus())")
+			expression = "java(spotDto.getDeliveryStatus().getStatus())")
 	SpotDetailResponse toSpotDetailResponse(SpotDto spotDto);
 
 	@BeanMapping(ignoreByDefault = false)
