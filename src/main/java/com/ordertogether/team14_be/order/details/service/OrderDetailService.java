@@ -130,7 +130,7 @@ public class OrderDetailService {
 						.orElseThrow(() -> new IllegalArgumentException("주문 정보가 없습니다."));
 
 		return new GetParticipantOrderInfoRes(
-				spot.getCategory().toString(),
+				spot.getCategory().getStringCategory(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
@@ -155,7 +155,7 @@ public class OrderDetailService {
 						.toList(); // creator의 id가 아닌 것만 필터링
 
 		return new GetCreatorOrderInfoRes(
-				spot.getCategory().toString(),
+				spot.getCategory().getStringCategory(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
