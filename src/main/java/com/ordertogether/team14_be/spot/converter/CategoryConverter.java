@@ -4,7 +4,7 @@ import com.ordertogether.team14_be.spot.enums.Category;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-@Converter
+@Converter(autoApply = false)
 public class CategoryConverter implements AttributeConverter<Category, String> {
 
 	@Override
