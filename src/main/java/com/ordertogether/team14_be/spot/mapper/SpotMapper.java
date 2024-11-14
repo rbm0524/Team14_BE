@@ -34,6 +34,10 @@ public interface SpotMapper {
 
 	@BeanMapping(ignoreByDefault = false)
 	@Mapping(target = "member", expression = "java(memberService.findMember(spotDto.getMemberId()))")
+	@Mapping(
+			target = "deliveryStatus",
+			expression =
+					"java(spotDto.getDeliveryStatus() == null ? DeliveryStatus.DELIVERING : spotDto.getDeliveryStatus())")
 	Spot toEntity(SpotDto spotDto, @Context MemberService memberService);
 
 	@BeanMapping(ignoreByDefault = false)
