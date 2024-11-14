@@ -57,11 +57,12 @@ public class SpotService {
 						.participantId(memberId)
 						.spotId(spotDto.getId())
 						.build();
-		orderDetailService.createOrderDetail(createOrderDetailReq);
 		log.info("SpotDto 생성 요청: {}", spotDto.toString());
 		Spot spot = SpotMapper.INSTANCE.toEntity(spotDto, memberService);
 		log.info("Spot 생성 요청: {}", spot.toString());
-		return SpotMapper.INSTANCE.toSpotCreationResponse(spotRepository.save(spot));
+		SpotDto savedSpotDto = spotRepository.save(spot);
+		orderDetailService.createOrderDetail(createOrderDetailReq);
+		return SpotMapper.INSTANCE.toSpotCreationResponse(savedSpotDto);
 	}
 
 	@Transactional(readOnly = true)
