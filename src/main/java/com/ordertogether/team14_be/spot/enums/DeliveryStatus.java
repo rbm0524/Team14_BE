@@ -17,7 +17,9 @@ public enum DeliveryStatus implements CodedEnum<String> {
 	private final String status;
 
 	public static Optional<DeliveryStatus> fromStringToEnum(String status) {
-		return Arrays.stream(DeliveryStatus.values()).filter(c -> c.status.equals(status)).findFirst();
+		return Arrays.stream(DeliveryStatus.values())
+				.filter(c -> c.getStatus().equals(status))
+				.findFirst();
 	}
 
 	@jakarta.persistence.Converter(autoApply = true)
