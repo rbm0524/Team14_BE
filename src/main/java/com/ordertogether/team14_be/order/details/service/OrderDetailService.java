@@ -93,7 +93,7 @@ public class OrderDetailService {
 	@Transactional(readOnly = true)
 	public GetOrdersInfoRes getOrdersInfo(Member member, int page, int size, String sort) {
 		Page<OrderDetail> orderDetails =
-				orderDetailRepository.findAllByMember(
+				orderDetailRepository.findByMember(
 						member,
 						PageRequest.of(
 								page,
