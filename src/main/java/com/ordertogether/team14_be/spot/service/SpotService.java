@@ -71,6 +71,7 @@ public class SpotService {
 		String hashString = geoHash.toBase32();
 		String geoHashPrefix = hashString.substring(0, precision);
 		List<SpotDto> resultAroundSpot = spotRepository.findBygeoHash(geoHashPrefix);
+		log.info("주변 Spot 조회 요청: {}", resultAroundSpot);
 		return resultAroundSpot.stream().map(SpotMapper.INSTANCE::toSpotViewedResponse).toList();
 	}
 
