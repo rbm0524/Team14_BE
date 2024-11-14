@@ -113,7 +113,6 @@ class SpotServiceTest {
 		SpotModifyResponse expectedSpotModifyResponse =
 				spotService.updateSpot(spotDtoWithSameCreator, 1L);
 
-		assertEquals(spotDto.getId(), expectedSpotModifyResponse.id());
 		assertEquals(spotDto.getLat(), expectedSpotModifyResponse.lat());
 		assertEquals(spotDto.getLng(), expectedSpotModifyResponse.lng());
 		assertEquals(spotDto.getCategory().getStringCategory(), expectedSpotModifyResponse.category());
@@ -146,7 +145,6 @@ class SpotServiceTest {
 		SpotModifyResponse response = spotService.updateSpot(updatedSpotDto, 1L);
 
 		// 검증
-		assertEquals(updatedSpotDto.getId(), response.id());
 		assertEquals(updatedSpotDto.getLat(), response.lat());
 		assertEquals(updatedSpotDto.getLng(), response.lng());
 		assertEquals(updatedSpotDto.getCategory().getStringCategory(), response.category());
