@@ -54,7 +54,7 @@ public class SpotService {
 				spotRepository.save(SpotMapper.INSTANCE.toEntity(spotDto, memberService));
 		CreateOrderDetailReq createOrderDetailReq =
 				CreateOrderDetailReq.builder()
-						.price(spotDto.getMinimumOrderAmount())
+						.price(-1) // 자신이 주문 금액을 입력하기 전이므로
 						.isPayed(false)
 						.participantId(memberId)
 						.spotId(savedSpotDto.getId())

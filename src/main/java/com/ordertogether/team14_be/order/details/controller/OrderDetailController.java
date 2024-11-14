@@ -45,15 +45,15 @@ public class OrderDetailController {
 		return ResponseEntity.ok(orderDetailService.getOrdersInfo(member, page, size, sort));
 	}
 
-	@GetMapping("/participant")
+	@GetMapping("/participant/{spotId}")
 	public ResponseEntity<GetParticipantOrderInfoRes> getParticipantOrderInfo(
-			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
+			@LoginMember Member member, @PathVariable Long spotId) {
 		return ResponseEntity.ok(orderDetailService.getParticipantOrderInfo(member, spotId));
 	}
 
-	@GetMapping("/creator")
+	@GetMapping("/creator/{spotId}")
 	public ResponseEntity<GetCreatorOrderInfoRes> getCreatorOrderInfo(
-			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
+			@LoginMember Member member, @PathVariable Long spotId) {
 		return ResponseEntity.ok(orderDetailService.getCreatorOrderInfo(member, spotId));
 	}
 
