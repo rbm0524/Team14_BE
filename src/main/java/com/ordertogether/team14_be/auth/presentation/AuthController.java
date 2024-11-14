@@ -1,5 +1,6 @@
 package com.ordertogether.team14_be.auth.presentation;
 
+import com.ordertogether.team14_be.auth.application.dto.TokenDto;
 import com.ordertogether.team14_be.auth.application.service.AuthService;
 import com.ordertogether.team14_be.auth.application.service.KakaoAuthService;
 import com.ordertogether.team14_be.common.web.response.ApiResponse;
@@ -39,7 +40,7 @@ public class AuthController {
 	}
 
 	@GetMapping("/login")
-	public ResponseEntity<ApiResponse<String>> getToken(
+	public ResponseEntity<ApiResponse<TokenDto>> getToken(
 			@RequestHeader("Authorization") String authorizationHeader,
 			HttpServletResponse httpServletResponse) {
 		String authorizationCode = authorizationHeader.replace("Bearer ", "");
@@ -50,6 +51,7 @@ public class AuthController {
 		log.info("회원: {}", existMember);
 		if (existMember.isPresent()) {
 			String serviceToken = authService.getServiceToken(userKakaoEmail);
+			TokenDto tokenDto = new TokenDto(serviceToken);
 
 			ResponseCookie cookie =
 					ResponseCookie.from("serviceToken", serviceToken)
@@ -65,7 +67,7 @@ public class AuthController {
 
 			return ResponseEntity.ok()
 					.headers(headers)
-					.body(ApiResponse.with(HttpStatus.OK, "로그인 성공", serviceToken));
+					.body(ApiResponse.with(HttpStatus.OK, "로그인 성공", tokenDto));
 		} else {
 			String redirectUrl = redirectPage + userKakaoEmail;
 			log.info("리다이렉트: {}", redirectUrl);
@@ -75,17 +77,18 @@ public class AuthController {
 				System.out.println(e.getMessage());
 			}
 			return ResponseEntity.status(HttpStatus.FOUND)
-					.body(ApiResponse.with(HttpStatus.FOUND, "리다이렉트", redirectUrl));
+					.body(ApiResponse.with(HttpStatus.FOUND, "리다이렉트", null));
 		}
 	}
 
 	@PostMapping("/signup")
-	public ResponseEntity<ApiResponse<String>> signUpMember(
+	public ResponseEntity<ApiResponse<TokenDto>> signUpMember(
 			@RequestParam String email, @RequestBody MemberInfoRequest memberInfoRequest) {
 		String serviceToken =
 				kakaoAuthService.register(
 						email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());
 		log.info("서비스 토큰: {}", serviceToken);
+		TokenDto tokenDto = new TokenDto(serviceToken);
 		ResponseCookie cookie =
 				ResponseCookie.from("serviceToken", serviceToken)
 						.httpOnly(true)
@@ -99,7 +102,7 @@ public class AuthController {
 
 		return ResponseEntity.ok()
 				.headers(headers)
-				.body(ApiResponse.with(HttpStatus.OK, "회원가입 성공", serviceToken));
+				.body(ApiResponse.with(HttpStatus.OK, "회원가입 성공", tokenDto));
 	}
 
 	@PostMapping("/logout")
