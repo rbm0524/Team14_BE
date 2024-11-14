@@ -4,9 +4,11 @@ import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.member.presentation.LoginMember;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
+import com.ordertogether.team14_be.order.details.dto.delete.DeleteOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
+import com.ordertogether.team14_be.order.details.dto.update.CompleteOrderReq;
 import com.ordertogether.team14_be.order.details.dto.update.UpdateOrderPriceReq;
 import com.ordertogether.team14_be.order.details.service.OrderDetailService;
 import jakarta.validation.Valid;
@@ -30,6 +32,7 @@ public class OrderDetailController {
 		return ResponseEntity.ok(createOrderDetailRes);
 	}
 
+	// 참여자 참여 시 주문 생성
 	@PostMapping
 	public ResponseEntity<CreateOrderDetailRes> participantOrder(
 			@LoginMember Member member, @RequestBody CreateOrderDetailReq dto) {
@@ -65,5 +68,21 @@ public class OrderDetailController {
 			@LoginMember Member member, @RequestBody @Valid UpdateOrderPriceReq dto) {
 		orderDetailService.updateOrderPrice(member, dto);
 		return ResponseEntity.ok().build();
+	}
+
+	// 주문 완료로 변경
+	@PostMapping("/complete")
+	public ResponseEntity<Void> completeOrder(
+			@LoginMember Member member, @RequestBody @Valid CompleteOrderReq dto) {
+		orderDetailService.completeOrder(member, dto);
+		return ResponseEntity.ok().build();
+	}
+
+	// 주문 삭제(참여자만)
+	@DeleteMapping("/delete")
+	public ResponseEntity<Void> deleteOrder(
+			@LoginMember Member member, @RequestBody @Valid DeleteOrderDetailReq dto) {
+		orderDetailService.deleteOrderDetail(member, dto);
+		return ResponseEntity.noContent().build();
 	}
 }
