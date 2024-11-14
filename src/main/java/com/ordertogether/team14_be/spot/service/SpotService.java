@@ -9,7 +9,6 @@ import com.ordertogether.team14_be.spot.dto.controllerdto.SpotDetailResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotModifyResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotViewedResponse;
 import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
-import com.ordertogether.team14_be.spot.entity.Spot;
 import com.ordertogether.team14_be.spot.exception.NotSpotMasterException;
 import com.ordertogether.team14_be.spot.mapper.SpotMapper;
 import com.ordertogether.team14_be.spot.repository.SpotRepository;
@@ -50,15 +49,16 @@ public class SpotService {
 		spotDto.setCreatedBy(spotDto.getMemberId());
 		spotDto.setModifiedAt(LocalDateTime.now());
 		spotDto.setModifiedBy(spotDto.getMemberId());
+		log.info("SpotDto 생성 요청: {}", spotDto.toString());
+		SpotDto savedSpotDto =
+				spotRepository.save(SpotMapper.INSTANCE.toEntity(spotDto, memberService));
 		CreateOrderDetailReq createOrderDetailReq =
 				CreateOrderDetailReq.builder()
 						.price(spotDto.getMinimumOrderAmount())
 						.isPayed(false)
 						.participantId(memberId)
-						.spotId(spotDto.getId())
+						.spotId(savedSpotDto.getId())
 						.build();
-		log.info("SpotDto 생성 요청: {}", spotDto.toString());
-		SpotDto savedSpotDto = spotRepository.save(SpotMapper.INSTANCE.toEntity(spotDto, memberService));
 		orderDetailService.createOrderDetail(createOrderDetailReq);
 		return SpotMapper.INSTANCE.toSpotCreationResponse(savedSpotDto);
 	}
