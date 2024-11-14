@@ -3,7 +3,9 @@ package com.ordertogether.team14_be.spot.converter;
 import jakarta.persistence.AttributeConverter;
 import java.util.Arrays;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class AbstractCodedEnumConverter<T extends Enum<T> & CodedEnum<E>, E>
 		implements AttributeConverter<T, E> {
 
@@ -26,15 +28,18 @@ public abstract class AbstractCodedEnumConverter<T extends Enum<T> & CodedEnum<E
 
 	// DB값을 Entity의 enum값으로 변환하는 방식을 정의
 	@Override
-	public T convertToEntityAttribute(
-			E dbData) { // Converts the data stored in the database column into the value to be stored
-		// in the entity attribute.
+	public T convertToEntityAttribute(E dbData) {
 		if (Objects.isNull(dbData)) {
 			return null;
 		}
-		return Arrays.stream(clazz.getEnumConstants())
-				.filter(e -> e.getCode().equals(dbData))
-				.findFirst()
-				.orElseThrow(() -> new IllegalArgumentException("Unknown code: " + dbData));
+
+		// 필터링된 결과가 여러 개일 경우 IllegalArgumentException을 던집니다.
+		var matchingEnums =
+				Arrays.stream(clazz.getEnumConstants()).filter(e -> e.getCode().equals(dbData)).toList();
+
+		if (matchingEnums.size() != 1) {
+			log.info("Failed to convert to entity attribute. dbData: {}, clazz: {}", dbData, clazz);
+		}
+		return matchingEnums.get(0);
 	}
 }
