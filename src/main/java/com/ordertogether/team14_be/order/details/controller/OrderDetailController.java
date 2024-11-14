@@ -5,7 +5,6 @@ import com.ordertogether.team14_be.member.presentation.LoginMember;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
-import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoReq;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.update.UpdateOrderPriceReq;
@@ -13,14 +12,7 @@ import com.ordertogether.team14_be.order.details.service.OrderDetailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,8 +21,8 @@ public class OrderDetailController {
 
 	private final OrderDetailService orderDetailService;
 
-	// 주문 생성
-	@PostMapping
+	// Spot만들면서 주문 생성
+	// @PostMapping
 	public ResponseEntity<CreateOrderDetailRes> createOrderDetail(
 			@RequestBody CreateOrderDetailReq createOrderDetailReq) {
 		CreateOrderDetailRes createOrderDetailRes =
@@ -38,21 +30,32 @@ public class OrderDetailController {
 		return ResponseEntity.ok(createOrderDetailRes);
 	}
 
-	@GetMapping
-	public ResponseEntity<GetOrdersInfoRes> getOrdersInfo(
-			@LoginMember Member member, @ModelAttribute @Valid GetOrdersInfoReq dto) {
-		return ResponseEntity.ok(orderDetailService.getOrdersInfo(member, dto));
+	@PostMapping
+	public ResponseEntity<CreateOrderDetailRes> participantOrder(
+			@LoginMember Member member, @RequestBody CreateOrderDetailReq dto) {
+		return ResponseEntity.ok(orderDetailService.participantOrder(member, dto));
 	}
 
-	@GetMapping("/participant")
+	@GetMapping
+	public ResponseEntity<GetOrdersInfoRes> getOrdersInfo(
+			@LoginMember Member member,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size,
+			@RequestParam(name = "sort") String sort) {
+		return ResponseEntity.ok(
+				orderDetailService.getOrdersInfo(
+						member, page - 1, size, sort)); // page는 0부터 시작, (프론트는 1부터 시작이므로)
+	}
+
+	@GetMapping("/participant/{spotId}")
 	public ResponseEntity<GetParticipantOrderInfoRes> getParticipantOrderInfo(
-			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
+			@LoginMember Member member, @PathVariable Long spotId) {
 		return ResponseEntity.ok(orderDetailService.getParticipantOrderInfo(member, spotId));
 	}
 
-	@GetMapping("/creator")
+	@GetMapping("/creator/{spotId}")
 	public ResponseEntity<GetCreatorOrderInfoRes> getCreatorOrderInfo(
-			@LoginMember Member member, @RequestParam(name = "spot-id") Long spotId) {
+			@LoginMember Member member, @PathVariable Long spotId) {
 		return ResponseEntity.ok(orderDetailService.getCreatorOrderInfo(member, spotId));
 	}
 

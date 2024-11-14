@@ -22,7 +22,9 @@ public class JwtInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		log.info("JwtInterceptor 실행");
 		if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+			log.info("OPTIONS 요청");
 			return true;
 		}
 
