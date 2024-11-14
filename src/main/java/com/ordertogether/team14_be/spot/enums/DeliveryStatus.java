@@ -20,12 +20,4 @@ public enum DeliveryStatus implements CodedEnum<String> {
 	public static Optional<DeliveryStatus> fromStringToEnum(String status) {
 		return Arrays.stream(DeliveryStatus.values()).filter(c -> c.status.equals(status)).findFirst();
 	}
-
-	// 한글 설명(String)을 ENUM으로 변환
-	@jakarta.persistence.Converter(autoApply = true)
-	static class Converter extends AbstractCodedEnumConverter<DeliveryStatus, String> {
-		public Converter() {
-			super(DeliveryStatus.class);
-		}
-	}
 }
