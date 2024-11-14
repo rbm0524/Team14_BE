@@ -11,13 +11,19 @@ import lombok.Getter;
 @Getter
 public enum DeliveryStatus implements CodedEnum<String> {
 	DELIVERING("001", "진행중"),
-	DELIVERED("002", "완료"),
-	;
+	DELIVERED("002", "완료");
 
 	private final String code;
 	private final String status;
 
 	public static Optional<DeliveryStatus> fromStringToEnum(String status) {
 		return Arrays.stream(DeliveryStatus.values()).filter(c -> c.status.equals(status)).findFirst();
+	}
+
+	@jakarta.persistence.Converter(autoApply = true)
+	static class Converter extends AbstractCodedEnumConverter<DeliveryStatus, String> {
+		public Converter() {
+			super(DeliveryStatus.class);
+		}
 	}
 }
