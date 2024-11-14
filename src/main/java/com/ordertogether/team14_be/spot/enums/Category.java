@@ -1,7 +1,5 @@
 package com.ordertogether.team14_be.spot.enums;
 
-import com.ordertogether.team14_be.spot.converter.AbstractCodedEnumConverter;
-import com.ordertogether.team14_be.spot.converter.CodedEnum;
 import java.util.Arrays;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -9,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum Category implements CodedEnum<String> {
+public enum Category {
 	JOKBAL_BOSSAM("001", "족발, 보쌈"),
 	KOREAN_STEW("002", "찜, 탕, 찌개"),
 	JAPANESE_FOOD("003", "돈까스, 회, 일식"),
@@ -41,13 +39,6 @@ public enum Category implements CodedEnum<String> {
 		return Optional.of(category.getCode())
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."))
 				.describeConstable(); // 상수 풀에 저장되는 값을 안전하게 참조
-	}
-
-	@jakarta.persistence.Converter
-	static class Converter extends AbstractCodedEnumConverter<Category, String> {
-		public Converter() {
-			super(Category.class);
-		}
 	}
 
 	/*

@@ -1,6 +1,5 @@
 package com.ordertogether.team14_be.spot.enums;
 
-import com.ordertogether.team14_be.spot.converter.CodedEnum;
 import java.util.Arrays;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum DeliveryStatus implements CodedEnum<String> {
+public enum DeliveryStatus {
 	DELIVERING("001", "진행중"),
 	DELIVERED("002", "완료");
 
