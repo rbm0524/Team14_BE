@@ -32,10 +32,8 @@ public class SpotService {
 
 	// Spot 상세 조회하기
 	@Transactional(readOnly = true)
-	public List<SpotDetailResponse> getSpotDetail(Long id, Long memberId) {
-		return spotRepository.findByMemberIdAndIsDeletedFalse(memberId).stream()
-				.map(SpotMapper.INSTANCE::toSpotDetailResponse)
-				.toList();
+	public SpotDetailResponse getSpotDetail(Long id) {
+		return SpotMapper.INSTANCE.toSpotDetailResponse(spotRepository.findByIdAndIsDeletedFalse(id));
 	}
 
 	@Transactional
