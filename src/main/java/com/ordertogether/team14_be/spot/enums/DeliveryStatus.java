@@ -28,7 +28,7 @@ public enum DeliveryStatus implements CodedEnum<String> {
 				.describeConstable();
 	}
 
-	@jakarta.persistence.Converter(autoApply = true)
+	@jakarta.persistence.Converter
 	static class Converter extends AbstractCodedEnumConverter<DeliveryStatus, String> {
 		public Converter() {
 			super(DeliveryStatus.class);

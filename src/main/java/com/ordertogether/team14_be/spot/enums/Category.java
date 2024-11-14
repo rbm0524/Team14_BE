@@ -43,7 +43,7 @@ public enum Category implements CodedEnum<String> {
 				.describeConstable(); // 상수 풀에 저장되는 값을 안전하게 참조
 	}
 
-	@jakarta.persistence.Converter(autoApply = true)
+	@jakarta.persistence.Converter
 	static class Converter extends AbstractCodedEnumConverter<Category, String> {
 		public Converter() {
 			super(Category.class);
