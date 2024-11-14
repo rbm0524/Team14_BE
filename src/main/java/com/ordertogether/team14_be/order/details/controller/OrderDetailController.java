@@ -4,7 +4,6 @@ import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.member.presentation.LoginMember;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
-import com.ordertogether.team14_be.order.details.dto.delete.DeleteOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
@@ -79,10 +78,9 @@ public class OrderDetailController {
 	}
 
 	// 주문 삭제(참여자만)
-	@DeleteMapping("/delete")
-	public ResponseEntity<Void> deleteOrder(
-			@LoginMember Member member, @RequestBody @Valid DeleteOrderDetailReq dto) {
-		orderDetailService.deleteOrderDetail(member, dto);
+	@DeleteMapping("/delete/{spotId}")
+	public ResponseEntity<Void> deleteOrder(@LoginMember Member member, @PathVariable Long spotId) {
+		orderDetailService.deleteOrderDetail(member, spotId);
 		return ResponseEntity.noContent().build();
 	}
 }

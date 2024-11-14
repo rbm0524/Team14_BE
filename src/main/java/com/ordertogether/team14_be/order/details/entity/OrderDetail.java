@@ -38,7 +38,8 @@ public class OrderDetail extends BaseTimeEntity {
 	@JoinColumn(name = "participant_id", nullable = false)
 	private Member member;
 
-	private int price;
+	// 기본적으로 가격 입력 전엔 -1로 해두기
+	private int price = -1;
 
 	private boolean isPayed;
 
