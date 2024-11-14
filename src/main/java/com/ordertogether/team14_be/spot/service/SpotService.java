@@ -54,7 +54,7 @@ public class SpotService {
 				CreateOrderDetailReq.builder()
 						.price(spotDto.getMinimumOrderAmount())
 						.isPayed(false)
-						.participantId(spotDto.getMemberId())
+						.participantId(memberId)
 						.spotId(spotDto.getId())
 						.build();
 		orderDetailService.createOrderDetail(createOrderDetailReq);
