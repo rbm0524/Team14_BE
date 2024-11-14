@@ -30,6 +30,13 @@ public class SpotController {
 				HttpStatus.CREATED);
 	}
 
+	// Spot 닫기
+	@PutMapping("/api/v1/spot/close/{id}")
+	public ResponseEntity<Void> closeSpot(@LoginMember Member member, @PathVariable Long id) {
+		spotService.closeSpot(id);
+		return ResponseEntity.noContent().build();
+	}
+
 	// Spot 상세 조회하기
 	@GetMapping("/api/v1/spot/{id}")
 	public ResponseEntity<SpotDetailResponse> getSpotDetail(

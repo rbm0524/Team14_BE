@@ -9,6 +9,7 @@ import com.ordertogether.team14_be.spot.dto.controllerdto.SpotDetailResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotModifyResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotViewedResponse;
 import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
+import com.ordertogether.team14_be.spot.enums.DeliveryStatus;
 import com.ordertogether.team14_be.spot.exception.NotSpotMasterException;
 import com.ordertogether.team14_be.spot.mapper.SpotMapper;
 import com.ordertogether.team14_be.spot.repository.SpotRepository;
@@ -93,5 +94,12 @@ public class SpotService {
 			throw new IllegalArgumentException("방장이 아닌 사람은 삭제할 수 없습니다.");
 		}
 		spotRepository.delete(id);
+	}
+
+	@Transactional
+	public void closeSpot(Long id) {
+		SpotDto spotDto = spotRepository.findByIdAndIsDeletedFalse(id);
+		spotDto.setDeliveryStatus(DeliveryStatus.DELIVERED);
+		spotRepository.update(spotDto);
 	}
 }

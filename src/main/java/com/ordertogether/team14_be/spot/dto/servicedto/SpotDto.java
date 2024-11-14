@@ -1,6 +1,7 @@
 package com.ordertogether.team14_be.spot.dto.servicedto;
 
 import com.ordertogether.team14_be.spot.enums.Category;
+import com.ordertogether.team14_be.spot.enums.DeliveryStatus;
 import jakarta.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -27,7 +28,7 @@ public class SpotDto {
 	private int minimumOrderAmount;
 	private String togetherOrderLink;
 	private String pickUpLocation;
-	private String deliveryStatus;
+	@Setter private DeliveryStatus deliveryStatus;
 	private LocalTime deadlineTime;
 	@Setter private String geoHash;
 	private boolean isDeleted;
