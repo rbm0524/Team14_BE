@@ -89,7 +89,6 @@ public class SpotService {
 	@Transactional
 	public void closeSpot(Long id) {
 		SpotDto spotDto = spotRepository.findByIdAndIsDeletedFalse(id);
-		spotDto.setDeliveryStatus(DeliveryStatus.DELIVERED);
 		spotRepository.update(spotDto);
 	}
 }

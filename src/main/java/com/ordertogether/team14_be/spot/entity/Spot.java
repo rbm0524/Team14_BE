@@ -47,9 +47,6 @@ public class Spot extends BaseEntity {
 
 	private String pickUpLocation;
 
-	@Convert(converter = DeliveryStatusConverter.class)
-	private DeliveryStatus deliveryStatus;
-
 	private LocalTime deadlineTime;
 	private String geoHash;
 	@Builder.Default private Boolean isDeleted = false;
