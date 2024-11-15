@@ -43,15 +43,19 @@ public class SpotRepository {
 
 	public SpotDto update(SpotDto updateSpotDto) {
 		log.info("Spot 수정 요청: {}", updateSpotDto.toString());
-		return save(
-				SpotMapper.INSTANCE.toEntity(
-						updateSpotDto,
-						simpleSpotRepository
-								.findById(updateSpotDto.getId())
-								.orElseThrow(
-										() ->
-												new SpotNotFoundException(
-														updateSpotDto.getId() + "에 해당하는 Spot을 찾을 수 없습니다."))));
+
+		// 기존 Spot 객체 조회
+		Spot spot =
+				simpleSpotRepository
+						.findById(updateSpotDto.getId())
+						.orElseThrow(
+								() -> new SpotNotFoundException(updateSpotDto.getId() + "에 해당하는 Spot을 찾을 수 없습니다."));
+
+		// SpotDto의 null이 아닌 필드만 Spot에 덮어쓰기
+		Spot updatedSpot = SpotMapper.INSTANCE.toEntity(updateSpotDto, spot);
+
+		// 업데이트된 Spot 객체를 저장
+		return save(updatedSpot);
 	}
 
 	public void delete(Long id) {
