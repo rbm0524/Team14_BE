@@ -28,6 +28,17 @@ public class WebConfig implements WebMvcConfigurer {
 				.addInterceptor(jwtInterceptor)
 				.addPathPatterns("/**")
 				.excludePathPatterns(
-						"/signup", "/api/v1/auth/signup", "/api/v1/auth/login", "/api/v1/spot/**");
+						"/signup",
+						"/api/v1/auth/signup",
+						"/api/v1/auth/login",
+						"/api/v1/spot/**",
+						"/swagger-ui/**",
+						"/v3/api-docs/**",
+						"/swagger-resources/**",
+						"/webjars/**",
+						"/signup",
+						"/api/v1/auth/signup",
+						"/api/v1/auth/login",
+						"/api/v1/spot/**");
 	}
 }
