@@ -11,10 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Entity
@@ -39,9 +36,9 @@ public class OrderDetail extends BaseTimeEntity {
 	private Member member;
 
 	// 기본적으로 가격 입력 전엔 -1로 해두기
-	private int price = -1;
+	@Builder.Default private Integer price = -1;
 
-	private boolean isPayed;
+	private Boolean isPayed;
 
 	public void updatePrice(int price) {
 		this.price = price;
