@@ -9,12 +9,14 @@ public class DeliveryStatusConverter implements AttributeConverter<DeliveryStatu
 
 	@Override
 	public String convertToDatabaseColumn(DeliveryStatus attribute) {
-		return attribute.getCode();
+		return (attribute == null) ? null : attribute.getCode();
 	}
 
 	@Override
 	public DeliveryStatus convertToEntityAttribute(String dbData) {
-		return DeliveryStatus.fromStringToEnum(dbData)
-				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 배달 상태입니다."));
+		return (dbData == null)
+				? null
+				: DeliveryStatus.fromStringToEnum(dbData)
+						.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리입니다."));
 	}
 }
