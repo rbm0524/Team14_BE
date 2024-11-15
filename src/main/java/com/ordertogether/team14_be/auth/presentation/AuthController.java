@@ -73,6 +73,7 @@ public class AuthController {
 			String redirectUrl = redirectPage + userKakaoEmail;
 			log.info("리다이렉트: {}", redirectUrl);
 			try {
+				httpServletResponse.setContentType("text/html");
 				httpServletResponse.sendRedirect(redirectUrl);
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
