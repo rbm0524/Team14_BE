@@ -4,7 +4,7 @@ import com.ordertogether.team14_be.spot.enums.DeliveryStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
-@Converter(autoApply = false)
+@Converter(autoApply = true)
 public class DeliveryStatusConverter implements AttributeConverter<DeliveryStatus, String> {
 
 	@Override
