@@ -168,7 +168,7 @@ class SpotServiceTest {
 		when(spotRepository.findByIdAndIsDeletedFalse(id)).thenReturn(spotDto);
 
 		// when
-		spotService.deleteSpot(id, 1L);
+		spotService.deleteSpot(1L);
 
 		// then
 		verify(spotRepository, times(1)).delete(id);
@@ -181,7 +181,6 @@ class SpotServiceTest {
 		when(spotRepository.findByIdAndIsDeletedFalse(id)).thenReturn(exceptionSpotDto);
 
 		assertThrows(
-				IllegalArgumentException.class,
-				() -> spotService.deleteSpot(id, 1L)); // 2L이 생성, 1L이 삭제하려 할 때
+				IllegalArgumentException.class, () -> spotService.deleteSpot(1L)); // 2L이 생성, 1L이 삭제하려 할 때
 	}
 }
