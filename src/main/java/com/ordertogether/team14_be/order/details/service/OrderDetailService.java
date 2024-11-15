@@ -136,7 +136,7 @@ public class OrderDetailService {
 
 		return new GetParticipantOrderInfoRes(
 				orderDetail.getId(),
-				spot.getCategory().toString(),
+				spot.getCategory().getStringCategory(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
