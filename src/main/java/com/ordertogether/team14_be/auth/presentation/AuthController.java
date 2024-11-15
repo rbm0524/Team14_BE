@@ -8,6 +8,7 @@ import com.ordertogether.team14_be.member.application.dto.MemberInfoRequest;
 import com.ordertogether.team14_be.member.application.service.MemberService;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -83,7 +84,7 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<ApiResponse<TokenDto>> signUpMember(
-			@RequestParam String email, @RequestBody MemberInfoRequest memberInfoRequest) {
+			@RequestParam String email, @Valid @RequestBody MemberInfoRequest memberInfoRequest) {
 		String serviceToken =
 				kakaoAuthService.register(
 						email, memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());

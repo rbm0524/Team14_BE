@@ -7,6 +7,7 @@ import com.ordertogether.team14_be.member.application.dto.MemberInfoResponse;
 import com.ordertogether.team14_be.member.application.service.MemberService;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class MemberController {
 
 	@PutMapping
 	public ResponseEntity<ApiResponse<MemberInfoResponse>> modifyMemberInfo(
-			@LoginMember Member member, @RequestBody MemberInfoRequest memberInfoRequest) {
+			@LoginMember Member member, @Valid @RequestBody MemberInfoRequest memberInfoRequest) {
 		MemberInfoResponse data =
 				memberService.modifyMember(
 						member.getId(), memberInfoRequest.deliveryName(), memberInfoRequest.phoneNumber());
