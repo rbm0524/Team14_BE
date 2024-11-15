@@ -139,7 +139,6 @@ public class OrderDetailService {
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
-				spot.getDeliveryStatus(),
 				orderDetail.getCreatedAt(),
 				orderDetail.getPrice());
 	}
@@ -165,7 +164,6 @@ public class OrderDetailService {
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
-				spot.getDeliveryStatus(),
 				spot.getCreatedAt(),
 				filteredOrders.stream()
 						.map(
