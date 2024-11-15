@@ -28,7 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
 				.addInterceptor(jwtInterceptor)
 				.addPathPatterns("/**")
 				.excludePathPatterns(
-						// Auth 관련 경로
+            // Auth 관련 경로
 						"/signup",
 						"/api/v1/auth/signup",
 						"/api/v1/auth/login",
