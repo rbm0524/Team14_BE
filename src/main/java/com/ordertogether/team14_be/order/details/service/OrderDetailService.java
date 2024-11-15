@@ -193,6 +193,7 @@ public class OrderDetailService {
 		}
 
 		orderDetail.updatePrice(dto.price());
+		orderDetail.updateIsPayed(true);
 		orderDetailRepository.save(orderDetail);
 	}
 
