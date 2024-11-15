@@ -63,7 +63,7 @@ public class OrderDetailService {
 		return CreateOrderDetailRes.builder()
 				.id(savedOrderDetail.getId())
 				.price(savedOrderDetail.getPrice())
-				.isPayed(savedOrderDetail.isPayed())
+				.isPayed(savedOrderDetail.getIsPayed())
 				.participantName(savedOrderDetail.getMember().getDeliveryName())
 				.spotName(spot.getStoreName())
 				.build();
@@ -90,7 +90,7 @@ public class OrderDetailService {
 		return new CreateOrderDetailRes(
 				orderDetail.getId(),
 				orderDetail.getPrice(),
-				orderDetail.isPayed(),
+				orderDetail.getIsPayed(),
 				member.getDeliveryName(),
 				spot.getStoreName());
 	}
@@ -173,7 +173,7 @@ public class OrderDetailService {
 											participant.getId(),
 											participant.getDeliveryName(),
 											order.getPrice(),
-											order.isPayed());
+											order.getIsPayed());
 								})
 						.toList()); // memberInfo
 	}
