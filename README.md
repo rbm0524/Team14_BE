@@ -1,5 +1,4 @@
 # Team14_BE
-
 14조 백엔드
 
 ## 프로젝트 소개
@@ -37,11 +36,6 @@
 | <img src="https://github.com/user-attachments/assets/ad48f508-3df6-4145-8e9c-a3c9c361396c" width=300> | - 카카오 지도를 통해 참여할 스팟을 확인할 수 있습니다. |
 |------------------------------------------------------------------------------------------------------|----------------------------------|
 
-
-## ERD 이미지
-
-![image](https://github.com/user-attachments/assets/59b8b750-ceb3-4484-a538-acd53d7fc370)
-
 ## 개발 인원 : 7명
 
 | 이름   | 담당 역할 및 기능                                                      |
@@ -63,3 +57,12 @@
 | **Infra**      | Amazon Web Service                 |
 | **Testing**    | JUnit5, Mockito                    |
 
+
+## ERD 이미지
+
+![image](https://github.com/user-attachments/assets/59b8b750-ceb3-4484-a538-acd53d7fc370)
+
+
+## API 명세서
+
+**[💻 API 명세서 - swagger](https://quickest-asterisk-75d.notion.site/API-2be0fa351c72490ba10edff6bfab1205)**
