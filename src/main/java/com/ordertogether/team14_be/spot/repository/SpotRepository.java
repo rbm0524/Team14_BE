@@ -43,7 +43,7 @@ public class SpotRepository {
 
 	public SpotDto update(SpotDto updateSpotDto) {
 		log.info("Spot 수정 요청: {}", updateSpotDto.toString());
-		return SpotMapper.INSTANCE.toDto(
+		return save(
 				SpotMapper.INSTANCE.toEntity(
 						updateSpotDto,
 						simpleSpotRepository
