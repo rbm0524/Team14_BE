@@ -59,7 +59,8 @@ public class SpotRepository {
 		updatedSpot.setPickUpLocation(updateSpotDto.getPickUpLocation());
 		log.info("수정된 Spot: {}", updatedSpot.toString());
 		// 업데이트된 Spot 객체를 저장
-		return SpotMapper.INSTANCE.toDto(simpleSpotRepository.saveAndFlush(SpotMapper.INSTANCE.toEntity(updatedSpot)));
+		return SpotMapper.INSTANCE.toDto(
+				simpleSpotRepository.saveAndFlush(SpotMapper.INSTANCE.toEntity(updatedSpot)));
 	}
 
 	public void delete(Long id) {
