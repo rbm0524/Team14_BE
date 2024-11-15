@@ -19,7 +19,7 @@ public record OrderInfo(
 		this(
 				order.getId(),
 				spot.getId(),
-				spot.getCategory().toString(),
+				spot.getCategory().getStringCategory(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
