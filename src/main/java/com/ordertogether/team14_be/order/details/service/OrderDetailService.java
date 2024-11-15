@@ -4,7 +4,6 @@ import com.ordertogether.team14_be.member.persistence.MemberRepository;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.create.CreateOrderDetailRes;
-import com.ordertogether.team14_be.order.details.dto.delete.DeleteOrderDetailReq;
 import com.ordertogether.team14_be.order.details.dto.get.GetCreatorOrderInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetOrdersInfoRes;
 import com.ordertogether.team14_be.order.details.dto.get.GetParticipantOrderInfoRes;
@@ -136,10 +135,12 @@ public class OrderDetailService {
 						.orElseThrow(() -> new IllegalArgumentException("주문 정보가 없습니다."));
 
 		return new GetParticipantOrderInfoRes(
-				spot.getCategory().getStringCategory(),
+				spot.getCategory().toString(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
+				spot.getDeliveryStatus(),
+				orderDetail.getCreatedAt(),
 				orderDetail.getPrice());
 	}
 
@@ -160,10 +161,12 @@ public class OrderDetailService {
 						.toList(); // creator의 id가 아닌 것만 필터링
 
 		return new GetCreatorOrderInfoRes(
-				spot.getCategory().getStringCategory(),
+				spot.getCategory().toString(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
+				spot.getDeliveryStatus(),
+				spot.getCreatedAt(),
 				filteredOrders.stream()
 						.map(
 								order -> {
@@ -208,10 +211,10 @@ public class OrderDetailService {
 	}
 
 	@Transactional
-	public void deleteOrderDetail(Member member, DeleteOrderDetailReq dto) {
+	public void deleteOrderDetail(Member member, Long spotId) {
 		Spot spot =
 				simpleSpotRepository
-						.findById(dto.spotId())
+						.findById(spotId)
 						.orElseThrow(() -> new IllegalArgumentException("스팟 정보가 없습니다."));
 		Member creator = spot.getMember();
 
