@@ -14,9 +14,9 @@ public enum DeliveryStatus {
 	private final String code;
 	private final String status;
 
-	public static Optional<DeliveryStatus> fromStringToEnum(String status) {
+	public static Optional<DeliveryStatus> fromStringToEnum(String code) {
 		return Arrays.stream(DeliveryStatus.values())
-				.filter(c -> c.getStatus().equals(status))
+				.filter(c -> c.getStatus().equals(code))
 				.findFirst();
 	}
 
