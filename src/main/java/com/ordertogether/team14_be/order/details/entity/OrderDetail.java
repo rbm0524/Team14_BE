@@ -3,14 +3,7 @@ package com.ordertogether.team14_be.order.details.entity;
 import com.ordertogether.team14_be.common.persistence.entity.BaseTimeEntity;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import com.ordertogether.team14_be.spot.entity.Spot;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -26,12 +19,12 @@ public class OrderDetail extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "spot_id", nullable = false)
 	private Spot spot;
 
 	// 방장의 정보는 Spot 에 있으니까...
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "participant_id", nullable = false)
 	private Member member;
 
