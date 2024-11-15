@@ -9,7 +9,6 @@ import com.ordertogether.team14_be.spot.dto.controllerdto.SpotDetailResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotModifyResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotViewedResponse;
 import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
-import com.ordertogether.team14_be.spot.enums.DeliveryStatus;
 import com.ordertogether.team14_be.spot.mapper.SpotMapper;
 import com.ordertogether.team14_be.spot.repository.SpotRepository;
 import java.math.BigDecimal;

@@ -5,14 +5,13 @@ import com.ordertogether.team14_be.spot.dto.controllerdto.*;
 import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
 import com.ordertogether.team14_be.spot.entity.Spot;
 import com.ordertogether.team14_be.spot.enums.Category;
-import com.ordertogether.team14_be.spot.enums.DeliveryStatus;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(
 		componentModel = "spring",
 		unmappedTargetPolicy = ReportingPolicy.IGNORE,
-		imports = {Category.class, DeliveryStatus.class}) // Spring Bean으로 등록
+		imports = Category.class) // Spring Bean으로 등록
 public interface SpotMapper {
 	SpotMapper INSTANCE = Mappers.getMapper(SpotMapper.class);
 
@@ -34,10 +33,6 @@ public interface SpotMapper {
 
 	@BeanMapping(ignoreByDefault = false)
 	@Mapping(target = "member", expression = "java(memberService.findMember(spotDto.getMemberId()))")
-	@Mapping(
-			target = "deliveryStatus",
-			expression =
-					"java(spotDto.getDeliveryStatus() == null ? DeliveryStatus.DELIVERING : spotDto.getDeliveryStatus())")
 	Spot toEntity(SpotDto spotDto, @Context MemberService memberService);
 
 	@BeanMapping(ignoreByDefault = false)

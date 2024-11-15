@@ -3,9 +3,7 @@ package com.ordertogether.team14_be.spot.converter;
 import jakarta.persistence.AttributeConverter;
 import java.util.Arrays;
 import java.util.Objects;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public abstract class AbstractCodedEnumConverter<T extends Enum<T> & CodedEnum<E>, E>
 		implements AttributeConverter<T, E> {
 
@@ -15,14 +13,12 @@ public abstract class AbstractCodedEnumConverter<T extends Enum<T> & CodedEnum<E
 		this.clazz = clazz;
 	}
 
+	@SuppressWarnings("unchecked") // 경고 억제
 	@Override
 	// Entity의 enum값을 DB에 변환하는 방식을 정의
 	public E convertToDatabaseColumn(
 			T attribute) { // Converts the value stored in the entity attribute into the data
 		// representation to be stored in the database.
-		if (Objects.isNull(attribute)) {
-			return null;
-		}
 		return attribute.getCode(); // 코드 저장 ex) KOREAN_STEW -> "002"
 	}
 
