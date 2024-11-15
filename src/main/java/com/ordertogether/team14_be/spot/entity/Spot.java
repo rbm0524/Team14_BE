@@ -25,7 +25,7 @@ public class Spot extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "master_id") // PK 참조해서 master_id 속성 추가
 	private Member member;
 
@@ -46,7 +46,7 @@ public class Spot extends BaseEntity {
 	private String togetherOrderLink;
 
 	private String pickUpLocation;
-	private String deliveryStatus;
+
 	private LocalTime deadlineTime;
 	private String geoHash;
 	@Builder.Default private Boolean isDeleted = false;

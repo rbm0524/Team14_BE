@@ -30,11 +30,18 @@ public class SpotController {
 				HttpStatus.CREATED);
 	}
 
+	// Spot 닫기
+	@PutMapping("/api/v1/spot/close/{id}")
+	public ResponseEntity<Void> closeSpot(@LoginMember Member member, @PathVariable Long id) {
+		spotService.closeSpot(id);
+		return ResponseEntity.noContent().build();
+	}
+
 	// Spot 상세 조회하기
 	@GetMapping("/api/v1/spot/{id}")
-	public ResponseEntity<List<SpotDetailResponse>> getSpotDetail(
+	public ResponseEntity<SpotDetailResponse> getSpotDetail(
 			@LoginMember Member member, @PathVariable Long id) {
-		return ResponseEntity.ok(spotService.getSpotDetail(id, member.getId()));
+		return ResponseEntity.ok(spotService.getSpotDetail(id));
 	}
 
 	// 반경 n미터 내 Spot 조회하기 - 전체 조회
@@ -55,7 +62,7 @@ public class SpotController {
 	// Spot 삭제하기
 	@DeleteMapping("/api/v1/spot/{id}")
 	public ResponseEntity<Void> deleteSpot(@LoginMember Member member, @PathVariable Long id) {
-		spotService.deleteSpot(id, member.getId()); // id는 SpotId임
+		spotService.deleteSpot(id); // id는 SpotId임
 		return ResponseEntity.ok().build();
 	}
 }

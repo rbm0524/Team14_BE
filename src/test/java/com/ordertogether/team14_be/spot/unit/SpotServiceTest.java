@@ -113,7 +113,6 @@ class SpotServiceTest {
 		SpotModifyResponse expectedSpotModifyResponse =
 				spotService.updateSpot(spotDtoWithSameCreator, 1L);
 
-		assertEquals(spotDto.getId(), expectedSpotModifyResponse.id());
 		assertEquals(spotDto.getLat(), expectedSpotModifyResponse.lat());
 		assertEquals(spotDto.getLng(), expectedSpotModifyResponse.lng());
 		assertEquals(spotDto.getCategory().getStringCategory(), expectedSpotModifyResponse.category());
@@ -146,7 +145,6 @@ class SpotServiceTest {
 		SpotModifyResponse response = spotService.updateSpot(updatedSpotDto, 1L);
 
 		// 검증
-		assertEquals(updatedSpotDto.getId(), response.id());
 		assertEquals(updatedSpotDto.getLat(), response.lat());
 		assertEquals(updatedSpotDto.getLng(), response.lng());
 		assertEquals(updatedSpotDto.getCategory().getStringCategory(), response.category());
@@ -170,7 +168,7 @@ class SpotServiceTest {
 		when(spotRepository.findByIdAndIsDeletedFalse(id)).thenReturn(spotDto);
 
 		// when
-		spotService.deleteSpot(id, 1L);
+		spotService.deleteSpot(1L);
 
 		// then
 		verify(spotRepository, times(1)).delete(id);
@@ -183,7 +181,6 @@ class SpotServiceTest {
 		when(spotRepository.findByIdAndIsDeletedFalse(id)).thenReturn(exceptionSpotDto);
 
 		assertThrows(
-				IllegalArgumentException.class,
-				() -> spotService.deleteSpot(id, 1L)); // 2L이 생성, 1L이 삭제하려 할 때
+				IllegalArgumentException.class, () -> spotService.deleteSpot(1L)); // 2L이 생성, 1L이 삭제하려 할 때
 	}
 }

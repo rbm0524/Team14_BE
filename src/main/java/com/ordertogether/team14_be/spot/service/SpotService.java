@@ -9,13 +9,11 @@ import com.ordertogether.team14_be.spot.dto.controllerdto.SpotDetailResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotModifyResponse;
 import com.ordertogether.team14_be.spot.dto.controllerdto.SpotViewedResponse;
 import com.ordertogether.team14_be.spot.dto.servicedto.SpotDto;
-import com.ordertogether.team14_be.spot.exception.NotSpotMasterException;
 import com.ordertogether.team14_be.spot.mapper.SpotMapper;
 import com.ordertogether.team14_be.spot.repository.SpotRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,10 +30,8 @@ public class SpotService {
 
 	// Spot 상세 조회하기
 	@Transactional(readOnly = true)
-	public List<SpotDetailResponse> getSpotDetail(Long id, Long memberId) {
-		return spotRepository.findByMemberIdAndIsDeletedFalse(memberId).stream()
-				.map(SpotMapper.INSTANCE::toSpotDetailResponse)
-				.toList();
+	public SpotDetailResponse getSpotDetail(Long id) {
+		return SpotMapper.INSTANCE.toSpotDetailResponse(spotRepository.findByIdAndIsDeletedFalse(id));
 	}
 
 	@Transactional
@@ -72,28 +68,28 @@ public class SpotService {
 		String hashString = geoHash.toBase32();
 		String geoHashPrefix = hashString.substring(0, precision);
 		List<SpotDto> resultAroundSpot = spotRepository.findBygeoHash(geoHashPrefix);
+		log.info("주변 Spot 조회 요청: {}", resultAroundSpot);
 		return resultAroundSpot.stream().map(SpotMapper.INSTANCE::toSpotViewedResponse).toList();
 	}
 
 	@Transactional
 	public SpotModifyResponse updateSpot(SpotDto spotDto, Long memberId) {
-		if (!Objects.equals(memberId, spotDto.getCreatedBy())) {
-			throw new NotSpotMasterException("작성자만 수정할 수 있습니다.");
-		}
 		spotDto.setModifiedAt(LocalDateTime.now());
 		spotDto.setMemberId(memberId);
+		log.info("SpotDto 수정 요청: {}", spotDto);
 		SpotDto modifiedSpotDto = spotRepository.update(spotDto);
 		log.info("Spot 수정 요청: {}", modifiedSpotDto);
 		return SpotMapper.INSTANCE.toSpotModifyResponse(modifiedSpotDto);
 	}
 
 	@Transactional
-	public void deleteSpot(Long id, Long memberId) {
-		SpotDto spotDto = spotRepository.findByIdAndIsDeletedFalse(id);
-		// id가 createdBy와 일치하는지 검증 후 delete
-		if (!Objects.equals(spotDto.getCreatedBy(), memberId)) {
-			throw new IllegalArgumentException("방장이 아닌 사람은 삭제할 수 없습니다.");
-		}
+	public void deleteSpot(Long id) {
 		spotRepository.delete(id);
+	}
+
+	@Transactional
+	public void closeSpot(Long id) {
+		SpotDto spotDto = spotRepository.findByIdAndIsDeletedFalse(id);
+		spotRepository.update(spotDto);
 	}
 }

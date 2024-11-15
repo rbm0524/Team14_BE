@@ -11,7 +11,6 @@ public record OrderInfo(
 		String storeName,
 		int minimumOrderAmount,
 		String pickUpLocation,
-		String deliveryStatus,
 		LocalDate orderDate,
 		int price,
 		boolean isCreator) {
@@ -20,11 +19,10 @@ public record OrderInfo(
 		this(
 				order.getId(),
 				spot.getId(),
-				spot.getCategory().toString(),
+				spot.getCategory().getStringCategory(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
-				spot.getDeliveryStatus(),
 				order.getCreatedAt().toLocalDate(),
 				order.getPrice(),
 				spot.getMember().getId().equals(memberId));

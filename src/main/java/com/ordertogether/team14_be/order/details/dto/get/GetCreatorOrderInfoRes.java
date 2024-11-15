@@ -8,6 +8,5 @@ public record GetCreatorOrderInfoRes(
 		String storeName,
 		int minimumOrderAmount,
 		String pickUpLocation,
-		String deliveryStatus,
 		LocalDateTime orderDate,
 		List<MemberBriefInfo> memberInfo) {}

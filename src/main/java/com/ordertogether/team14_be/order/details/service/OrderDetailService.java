@@ -63,7 +63,7 @@ public class OrderDetailService {
 		return CreateOrderDetailRes.builder()
 				.id(savedOrderDetail.getId())
 				.price(savedOrderDetail.getPrice())
-				.isPayed(savedOrderDetail.isPayed())
+				.isPayed(savedOrderDetail.getIsPayed())
 				.participantName(savedOrderDetail.getMember().getDeliveryName())
 				.spotName(spot.getStoreName())
 				.build();
@@ -90,7 +90,7 @@ public class OrderDetailService {
 		return new CreateOrderDetailRes(
 				orderDetail.getId(),
 				orderDetail.getPrice(),
-				orderDetail.isPayed(),
+				orderDetail.getIsPayed(),
 				member.getDeliveryName(),
 				spot.getStoreName());
 	}
@@ -136,11 +136,10 @@ public class OrderDetailService {
 
 		return new GetParticipantOrderInfoRes(
 				orderDetail.getId(),
-				spot.getCategory().toString(),
+				spot.getCategory().getStringCategory(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
-				spot.getDeliveryStatus(),
 				orderDetail.getCreatedAt(),
 				orderDetail.getPrice());
 	}
@@ -162,11 +161,10 @@ public class OrderDetailService {
 						.toList(); // creator의 id가 아닌 것만 필터링
 
 		return new GetCreatorOrderInfoRes(
-				spot.getCategory().toString(),
+				spot.getCategory().getStringCategory(),
 				spot.getStoreName(),
 				spot.getMinimumOrderAmount(),
 				spot.getPickUpLocation(),
-				spot.getDeliveryStatus(),
 				spot.getCreatedAt(),
 				filteredOrders.stream()
 						.map(
@@ -176,7 +174,7 @@ public class OrderDetailService {
 											participant.getId(),
 											participant.getDeliveryName(),
 											order.getPrice(),
-											order.isPayed());
+											order.getIsPayed());
 								})
 						.toList()); // memberInfo
 	}

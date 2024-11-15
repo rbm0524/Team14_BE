@@ -8,6 +8,5 @@ public record GetParticipantOrderInfoRes(
 		String storeName,
 		int minimumOrderAmount,
 		String pickUpLocation,
-		String deliveryStatus,
 		LocalDateTime orderDate,
 		int price) {}

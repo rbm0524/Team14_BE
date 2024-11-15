@@ -10,5 +10,6 @@ public record SpotViewedResponse(
 		String category,
 		String storeName,
 		Integer minimumOrderAmount,
+		String togetherOrderLink,
 		String pickUpLocation,
 		LocalTime deadlineTime) {}
