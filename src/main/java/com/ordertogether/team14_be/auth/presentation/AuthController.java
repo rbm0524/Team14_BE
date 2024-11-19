@@ -3,13 +3,13 @@ package com.ordertogether.team14_be.auth.presentation;
 import com.ordertogether.team14_be.auth.application.dto.TokenDto;
 import com.ordertogether.team14_be.auth.application.service.AuthService;
 import com.ordertogether.team14_be.auth.application.service.KakaoAuthService;
+import com.ordertogether.team14_be.auth.exception.NotMemberException;
 import com.ordertogether.team14_be.common.web.response.ApiResponse;
 import com.ordertogether.team14_be.member.application.dto.MemberInfoRequest;
 import com.ordertogether.team14_be.member.application.service.MemberService;
 import com.ordertogether.team14_be.member.persistence.entity.Member;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -73,13 +73,7 @@ public class AuthController {
 		} else {
 			String redirectUrl = redirectPage + userKakaoEmail;
 			log.info("리다이렉트: {}", redirectUrl);
-			try {
-				httpServletResponse.sendRedirect(redirectUrl);
-			} catch (IOException e) {
-				System.out.println(e.getMessage());
-			}
-			return ResponseEntity.status(HttpStatus.FOUND)
-					.body(ApiResponse.with(HttpStatus.FOUND, "리다이렉트", null));
+			throw new NotMemberException(redirectUrl);
 		}
 	}
 
