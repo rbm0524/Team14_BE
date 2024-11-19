@@ -43,8 +43,7 @@ public class AuthController {
 
 	@GetMapping("/login")
 	public ResponseEntity<ApiResponse<TokenDto>> getToken(
-			@RequestHeader("Authorization") String authorizationHeader,
-			HttpServletResponse httpServletResponse) {
+			@RequestHeader("Authorization") String authorizationHeader) {
 		String authorizationCode = authorizationHeader.replace("Bearer ", "");
 		log.info("인가 코드: {}", authorizationCode);
 		String userKakaoEmail = kakaoAuthService.getKakaoUserEmail(authorizationCode);
