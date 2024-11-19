@@ -29,7 +29,7 @@ class PointUpdateServiceTest {
 	void setUp() {
 		paymentDatabaseHelper.clean();
 
-		paymentDatabaseHelper.setOrderId("test-order-id");
+		// paymentDatabaseHelper.setOrderId("test-order-id");
 		paymentDatabaseHelper.saveTestData();
 	}
 
