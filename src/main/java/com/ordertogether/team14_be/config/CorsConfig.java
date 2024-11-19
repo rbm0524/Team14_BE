@@ -14,6 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 				.allowedHeaders("Authorization", "Content-Type")
 				.exposedHeaders("Custom-Header")
+				.allowCredentials(true) // 인증 정보를 보내는 요청을 허용 (쿠키 등)
 				.maxAge(3600);
 	}
 }
