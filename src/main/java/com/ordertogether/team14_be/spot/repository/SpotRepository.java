@@ -41,26 +41,11 @@ public class SpotRepository {
 				.toList();
 	}
 
-	public SpotDto update(SpotDto updateSpotDto) {
-		log.info("Spot 수정 요청: {}", updateSpotDto.toString());
+	public SpotDto update(Spot updateSpot) {
+		log.info("Spot 수정 요청: {}", updateSpot.toString());
 
-		// 기존 Spot 객체 조회
-		Spot spot =
-				simpleSpotRepository
-						.findById(updateSpotDto.getId())
-						.orElseThrow(
-								() -> new SpotNotFoundException(updateSpotDto.getId() + "에 해당하는 Spot을 찾을 수 없습니다."));
-
-		SpotDto updatedSpot = SpotMapper.INSTANCE.toDto(spot);
-		updatedSpot.setStoreName(updateSpotDto.getStoreName());
-		updatedSpot.setCategory(updateSpotDto.getCategory());
-		updatedSpot.setMinimumOrderAmount(updateSpotDto.getMinimumOrderAmount());
-		updatedSpot.setTogetherOrderLink(updateSpotDto.getTogetherOrderLink());
-		updatedSpot.setPickUpLocation(updateSpotDto.getPickUpLocation());
-		log.info("수정된 Spot: {}", updatedSpot.toString());
 		// 업데이트된 Spot 객체를 저장
-		return SpotMapper.INSTANCE.toDto(
-				simpleSpotRepository.saveAndFlush(SpotMapper.INSTANCE.toEntity(updatedSpot)));
+		return SpotMapper.INSTANCE.toDto(simpleSpotRepository.saveAndFlush(updateSpot));
 	}
 
 	public void delete(Long id) {

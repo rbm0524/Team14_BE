@@ -74,11 +74,22 @@ public class SpotService {
 
 	@Transactional
 	public SpotModifyResponse updateSpot(SpotDto spotDto, Long memberId) {
-		spotDto.setModifiedAt(LocalDateTime.now());
-		spotDto.setMemberId(memberId);
 		log.info("SpotDto 수정 요청: {}", spotDto);
-		SpotDto modifiedSpotDto = spotRepository.update(spotDto);
-		log.info("Spot 수정 요청: {}", modifiedSpotDto);
+		SpotDto needUpdateSpotDto = spotRepository.findByIdAndIsDeletedFalse(spotDto.getId());
+		log.info("기존 SpotDto: {}", needUpdateSpotDto);
+		if (!needUpdateSpotDto.getMemberId().equals(memberId)) {
+			throw new IllegalArgumentException("본인이 등록한 Spot만 수정 가능합니다.");
+		}
+		needUpdateSpotDto.setStoreName(spotDto.getStoreName());
+		needUpdateSpotDto.setCategory(spotDto.getCategory());
+		needUpdateSpotDto.setMinimumOrderAmount(spotDto.getMinimumOrderAmount());
+		needUpdateSpotDto.setTogetherOrderLink(spotDto.getTogetherOrderLink());
+		needUpdateSpotDto.setPickUpLocation(spotDto.getPickUpLocation());
+		needUpdateSpotDto.setModifiedAt(LocalDateTime.now());
+
+		SpotDto modifiedSpotDto =
+				spotRepository.update(SpotMapper.INSTANCE.toEntity(needUpdateSpotDto, memberService));
+		log.info("변경된 Spot: {}", modifiedSpotDto);
 		return SpotMapper.INSTANCE.toSpotModifyResponse(modifiedSpotDto);
 	}
 
@@ -90,6 +101,6 @@ public class SpotService {
 	@Transactional
 	public void closeSpot(Long id) {
 		SpotDto spotDto = spotRepository.findByIdAndIsDeletedFalse(id);
-		spotRepository.update(spotDto);
+		spotRepository.update(SpotMapper.INSTANCE.toEntity(spotDto, memberService));
 	}
 }
