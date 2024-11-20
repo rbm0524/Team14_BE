@@ -3,7 +3,6 @@ package com.ordertogether.team14_be.auth.presentation;
 import com.ordertogether.team14_be.auth.application.dto.TokenDto;
 import com.ordertogether.team14_be.auth.application.service.AuthService;
 import com.ordertogether.team14_be.auth.application.service.KakaoAuthService;
-import com.ordertogether.team14_be.auth.exception.NotMemberException;
 import com.ordertogether.team14_be.common.web.response.ApiResponse;
 import com.ordertogether.team14_be.member.application.dto.MemberInfoRequest;
 import com.ordertogether.team14_be.member.application.service.MemberService;
@@ -42,8 +41,7 @@ public class AuthController {
 	}
 
 	@GetMapping("/login")
-	public ResponseEntity<ApiResponse<TokenDto>> getToken(
-			@RequestHeader("Authorization") String authorizationHeader) {
+	public ResponseEntity<?> getToken(@RequestHeader("Authorization") String authorizationHeader) {
 		String authorizationCode = authorizationHeader.replace("Bearer ", "");
 		log.info("인가 코드: {}", authorizationCode);
 		String userKakaoEmail = kakaoAuthService.getKakaoUserEmail(authorizationCode);
@@ -72,7 +70,9 @@ public class AuthController {
 		} else {
 			String redirectUrl = redirectPage + userKakaoEmail;
 			log.info("리다이렉트: {}", redirectUrl);
-			throw new NotMemberException(redirectUrl);
+			HttpHeaders headers = new HttpHeaders();
+			headers.set("Location", redirectUrl);
+			return ResponseEntity.status(HttpStatus.FOUND).headers(headers).build();
 		}
 	}
 
