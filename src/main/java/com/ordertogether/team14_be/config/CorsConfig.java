@@ -12,7 +12,7 @@ public class CorsConfig implements WebMvcConfigurer {
 				.addMapping("/**")
 				.allowedOrigins(
 						"http://localhost:3000",
-						"https://team14-fe-livid.vercel.app/",
+						"https://team14-fe-livid.vercel.app",
 						"https://order-together.duckdns.org")
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 				.allowedHeaders("Authorization", "Content-Type")
