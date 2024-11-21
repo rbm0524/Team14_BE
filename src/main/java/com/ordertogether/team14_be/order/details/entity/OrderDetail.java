@@ -19,12 +19,16 @@ public class OrderDetail extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@ManyToOne(
+			fetch = FetchType.LAZY,
+			cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
 	@JoinColumn(name = "spot_id", nullable = false)
 	private Spot spot;
 
 	// 방장의 정보는 Spot 에 있으니까...
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@ManyToOne(
+			fetch = FetchType.LAZY,
+			cascade = {CascadeType.REMOVE, CascadeType.REFRESH})
 	@JoinColumn(name = "participant_id", nullable = false)
 	private Member member;
 
