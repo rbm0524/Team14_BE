@@ -10,7 +10,10 @@ public class CorsConfig implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry
 				.addMapping("/**")
-				.allowedOrigins("http://localhost:3000", "https://team14-fe-livid.vercel.app/")
+				.allowedOrigins(
+						"http://localhost:3000",
+						"https://team14-fe-livid.vercel.app/",
+						"https://order-together.duckdns.org")
 				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 				.allowedHeaders("Authorization", "Content-Type")
 				.exposedHeaders("Custom-Header")
